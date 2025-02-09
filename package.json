@@ -15,6 +15,7 @@
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"web-dev-server\""
   },
   "dependencies": {
+    "chess.js": "^1.0.0",
     "lit": "^3.1.4"
   },
   "devDependencies": {
@@ -56,14 +57,13 @@
       "@typescript-eslint/no-unused-vars": [
         "error"
       ],
+      "no-shadow": "off",
+      "@typescript-eslint/no-shadow": "warn",
       "import/no-unresolved": "off",
-      "import/extensions": [
-        "error",
-        "always",
-        {
-          "ignorePackages": true
-        }
-      ]
+      "import/extensions": "off",
+      "no-plusplus": "off",
+      "class-methods-use-this": "off",
+      "max-classes-per-file": "off"
     }
   },
   "prettier": {
