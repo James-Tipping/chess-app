@@ -36,9 +36,6 @@ export class ChessPiece extends LitElement {
     );
 
     e.dataTransfer?.setData('text/plain', this.squareId || '');
-    console.log(
-      `e.dataTransfer?.getData('text/plain'): ${e.dataTransfer?.getData('text/plain')}`,
-    );
   }
 
   render() {

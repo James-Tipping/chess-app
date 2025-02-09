@@ -53,7 +53,6 @@ export class ChessSquare extends LitElement {
   drop(e: DragEvent) {
     e.preventDefault();
     const data = e.dataTransfer?.getData('text/plain');
-    console.log(`data: ${data}`);
     if (data) {
       this.dispatchEvent(
         new ChessPieceDroppedEvent({
@@ -62,7 +61,6 @@ export class ChessSquare extends LitElement {
           composed: true,
         }),
       );
-      console.log('custom drop event dispatched');
     }
   }
 
