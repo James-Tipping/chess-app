@@ -1,6 +1,5 @@
-import { LitElement, html } from 'lit';
+import { LitElement, PropertyValues, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-// import 'chessboard-element';
 import { ChessPieceColour } from './types/ChessBoardElementTypes';
 import { ChessGameController } from './ChessGameController';
 import './components/ChessBoard';
@@ -34,7 +33,23 @@ export class ChessApp extends LitElement {
 
   onDrop(e: ChessPieceDroppedEvent) {
     const { source, target } = e.detail;
-    this._gameController?.movePiece(source, target, 'q');
+    this._gameController?.movePiece({
+      from: source,
+      to: target,
+      promotion: 'q',
+    });
+  }
+
+  protected async updated(_changedProperties: PropertyValues) {
+    super.updated(_changedProperties);
+    await this.updateComplete;
+    if (
+      !this._gameController.isGameOver &&
+      this._gameController.turn === ChessPieceColour.BLACK
+    ) {
+      // alert('Game Over');
+      this._gameController.makeAiMove();
+    }
   }
 
   render() {
