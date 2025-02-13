@@ -1,8 +1,6 @@
-<p align="center">
-  <img width="200" src="https://open-wc.org/hero.png"></img>
-</p>
+## Chess App (work in progress)
 
-## Open-wc Starter App
+A chess app using a minimax algorithm (not yet completed). The only dependencies are Lit (a lightweight framework for making web components), and chess.js for chess move validation.
 
 [![Built with open-wc recommendations](https://img.shields.io/badge/built%20with-open--wc-blue.svg)](https://github.com/open-wc)
 
