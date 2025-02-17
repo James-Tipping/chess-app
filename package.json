@@ -1,7 +1,7 @@
 {
   "name": "chess-app",
   "description": "Webcomponent chess-app following open-wc recommendations",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "author": "chess-app",
   "version": "0.0.0",
   "type": "module",

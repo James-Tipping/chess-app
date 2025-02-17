@@ -55,6 +55,7 @@ export class ChessApp extends LitElement {
   render() {
     return html`
       <div>
+        Black Advantage: ${this._gameController.getAdvantage()}
         <chess-board
           .fen=${this._gameController.position}
           @chess-piece-dropped=${this.onDrop}
