@@ -8,8 +8,8 @@ export class ChessPieceDroppedEvent extends CustomEvent<{
   source: string;
   target: string;
 }> {
-  // eslint-disable-next-line no-undef
   constructor(
+    // eslint-disable-next-line no-undef
     eventInitDict?: CustomEventInit<{ source: string; target: string }>,
   ) {
     super('chess-piece-dropped', eventInitDict);
@@ -25,6 +25,8 @@ export class ChessSquare extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      box-sizing: border-box;
     }
     .light {
       background-color: #f0d9b5;
@@ -32,13 +34,26 @@ export class ChessSquare extends LitElement {
     .dark {
       background-color: #b58863;
     }
+    .square-id {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+    }
+    .from {
+      border: 10px solid #c4bf5c;
+    }
+    .to {
+      border: 10px solid #e8dd10;
+    }
   `;
 
   @property({ type: String }) colour?: SquareColour;
 
   @property({ type: String }) piece?: ChessPieceType;
 
-  @property({ type: Boolean }) isHighlighted = false;
+  @property({ type: Boolean }) from: boolean = false;
+
+  @property({ type: Boolean }) to: boolean = false;
 
   private _isLightSquare(id: string): boolean {
     const file = id.charCodeAt(0) - 'a'.charCodeAt(0);
@@ -68,7 +83,8 @@ export class ChessSquare extends LitElement {
     const colourClasses = {
       light: this._isLightSquare(this.id),
       dark: !this._isLightSquare(this.id),
-      highlighted: this.isHighlighted,
+      from: this.from,
+      to: this.to,
     };
 
     return html`
@@ -77,7 +93,6 @@ export class ChessSquare extends LitElement {
         @dragover=${this.dragOver}
         class="square ${classMap(colourClasses)}"
       >
-        ${this.id}
         ${this.piece
           ? html`<chess-piece
               .squareId=${this.id}
