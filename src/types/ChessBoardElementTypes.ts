@@ -1,3 +1,5 @@
+import { Move } from 'chess.js';
+
 export enum SquareColour {
   LIGHT = 'l',
   DARK = 'd',
@@ -22,4 +24,13 @@ export enum ChessPieceType {
   BLACK_BISHOP = 'b',
   BLACK_KNIGHT = 'n',
   BLACK_PAWN = 'p',
+}
+
+export interface WorkerMessage {
+  depth: number;
+  fen: string;
+}
+
+export interface WorkerResponse {
+  bestMove: Move | null;
 }

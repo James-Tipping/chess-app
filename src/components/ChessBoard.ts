@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './ChessSquare';
+import { Move } from 'chess.js';
 
 @customElement('chess-board')
 export class ChessBoard extends LitElement {
@@ -15,6 +16,8 @@ export class ChessBoard extends LitElement {
   `;
 
   @property({ type: String }) fen = '';
+
+  @property() lastMove: Move | null = null;
 
   squareId(i: number): string {
     return String.fromCharCode(97 + (i % 8)) + (8 - Math.floor(i / 8));
@@ -48,6 +51,8 @@ export class ChessBoard extends LitElement {
           { length: 64 },
           (_, i) => html`
             <chess-square
+              .from=${this.lastMove?.from === this.squareId(i)}
+              .to=${this.lastMove?.to === this.squareId(i)}
               id=${this.squareId(i)}
               .piece=${this.squarePiece(i, this.fen)}
             ></chess-square>

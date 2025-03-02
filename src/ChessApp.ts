@@ -5,7 +5,7 @@ import { ChessGameController } from './ChessGameController';
 import './components/ChessBoard';
 import { ChessPieceDroppedEvent } from './components/ChessSquare';
 import { ChessPieceDragStartEvent } from './pieces/ChessPiece';
-import { getChessPieceColour } from './Utils';
+import { getChessPieceColour } from './utils/Utils';
 
 @customElement('chess-app')
 export class ChessApp extends LitElement {
@@ -57,6 +57,7 @@ export class ChessApp extends LitElement {
       <div>
         Black Advantage: ${this._gameController.getAdvantage()}
         <chess-board
+          .lastMove=${this._gameController.lastMove}
           .fen=${this._gameController.position}
           @chess-piece-dropped=${this.onDrop}
           @chess-piece-drag-start=${this.onDragStart}
