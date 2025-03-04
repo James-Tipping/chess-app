@@ -85,6 +85,10 @@ export class ChessGameController implements ReactiveController {
     return this._game?.fen();
   }
 
+  get isStalemate() {
+    return this._game?.isStalemate();
+  }
+
   get isGameOver() {
     return this._game?.isGameOver();
   }
