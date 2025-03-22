@@ -26,6 +26,12 @@ export enum ChessPieceType {
   BLACK_PAWN = 'p',
 }
 
+export enum DialogMessage {
+  LOSE = 'You lose!',
+  WIN = 'Well done! You win!',
+  STALEMATE = "Oops, it's a stalemate!",
+}
+
 export interface WorkerMessage {
   depth: number;
   fen: string;

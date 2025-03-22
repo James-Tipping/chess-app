@@ -1,5 +1,11 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+
+export class CloseDialogEvent extends CustomEvent<void> {
+  constructor() {
+    super('close-dialog', { bubbles: true, composed: true });
+  }
+}
 
 @customElement('dialog-element')
 export class DialogElement extends LitElement {
@@ -15,7 +21,9 @@ export class DialogElement extends LitElement {
     .message {
       font-size: 1rem;
     }
-    .slotted {
+    ::slotted {
+      display: flex;
+      justify-content: space-between;
     }
   `;
 
@@ -25,14 +33,24 @@ export class DialogElement extends LitElement {
   @property()
   dialogMessage?: string;
 
+  @property()
+  dialogOpen?: boolean = false;
+
+  onClickClose() {
+    this.dispatchEvent(new CloseDialogEvent());
+  }
+
   render() {
     return html`
-      <div class="dialog-container">
-        <h2 class="title">${this.dialogTitle}</h2>
-        <p class="message">${this.dialogMessage}</p>
-
-        <slot></slot>
-      </div>
+      ${this.dialogOpen
+        ? html`
+            <div class="dialog-container">
+              <h2 class="title">${this.dialogTitle}</h2>
+              <p class="message">${this.dialogMessage}</p>
+              <button @click=${this.onClickClose}>Close</button>
+            </div>
+          `
+        : nothing}
     `;
   }
 }

@@ -65,8 +65,12 @@ export class ChessGameController implements ReactiveController {
     this._host.requestUpdate();
   }
 
-  getAdvantage() {
+  get blackAdvantage() {
     return evaluateBoard(this._game!);
+  }
+
+  get whiteAdvantage() {
+    return -evaluateBoard(this._game!);
   }
 
   get inCheck() {
@@ -103,5 +107,16 @@ export class ChessGameController implements ReactiveController {
 
   makeAiMove() {
     this._worker.postMessage({ fen: this._game?.fen(), depth: 3 });
+  }
+
+  newGame() {
+    this._game?.reset();
+    this._host.requestUpdate();
+  }
+
+  undoMove() {
+    this._game?.undo();
+    this._game?.undo();
+    this._host.requestUpdate();
   }
 }
