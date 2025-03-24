@@ -1,56 +1,60 @@
-import { css, html, LitElement, nothing } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { css, html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
+import './Button';
 
-export class CloseDialogEvent extends CustomEvent<void> {
+export class CloseDialogClickedEvent extends CustomEvent<void> {
   constructor() {
-    super('close-dialog', { bubbles: true, composed: true });
+    super('close-dialog-clicked', { bubbles: true, composed: true });
   }
 }
 
 @customElement('dialog-element')
 export class DialogElement extends LitElement {
   static styles = css`
+    :host {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 400px;
+      width: 400px;
+    }
     .dialog-container {
-      border: 1px solid black;
-      padding: 1rem;
+      border: none;
+      border-radius: 16px;
+      padding: 2rem;
       margin: 1rem;
-    }
-    .title {
-      font-size: 1.5rem;
-    }
-    .message {
-      font-size: 1rem;
-    }
-    ::slotted {
+      height: 100%;
+      width: 100%;
+      background-color: #f5f5f7;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
+    }
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
     }
   `;
 
-  @property()
-  dialogTitle?: string;
-
-  @property()
-  dialogMessage?: string;
-
-  @property()
-  dialogOpen?: boolean = false;
-
-  onClickClose() {
-    this.dispatchEvent(new CloseDialogEvent());
+  protected onClickClose() {
+    this.dispatchEvent(new CloseDialogClickedEvent());
   }
 
   render() {
     return html`
-      ${this.dialogOpen
-        ? html`
-            <div class="dialog-container">
-              <h2 class="title">${this.dialogTitle}</h2>
-              <p class="message">${this.dialogMessage}</p>
-              <button @click=${this.onClickClose}>Close</button>
-            </div>
-          `
-        : nothing}
+      <div class="dialog-container">
+        <slot></slot>
+        <div class="button-container">
+          <button-element
+            @button-clicked=${this.onClickClose}
+            label="Close"
+          ></button-element>
+        </div>
+      </div>
     `;
   }
 }
