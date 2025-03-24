@@ -22,6 +22,7 @@ export class ChessApp extends LitElement {
       align-items: center;
       gap: 2rem;
       justify-content: center;
+      padding: 2rem;
     }
   `;
 
@@ -84,18 +85,12 @@ export class ChessApp extends LitElement {
     /* eslint-disable-next-line wc/guard-super-call */
     super.connectedCallback();
     this.addEventListener('close-dialog', this.closeDialog);
-    this.addEventListener('depth-changed', this.onDepthChanged);
-    this.addEventListener('ai-vs-ai-start', this.onAIvsAIStart);
-    this.addEventListener('ai-vs-ai-stop', this.onAIvsAIStop);
   }
 
   disconnectedCallback() {
     /* eslint-disable-next-line wc/guard-super-call */
     super.disconnectedCallback();
     this.removeEventListener('close-dialog', this.closeDialog);
-    this.removeEventListener('depth-changed', this.onDepthChanged);
-    this.removeEventListener('ai-vs-ai-start', this.onAIvsAIStart);
-    this.removeEventListener('ai-vs-ai-stop', this.onAIvsAIStop);
   }
 
   closeDialog = () => this._dialogController.hide();
@@ -174,6 +169,9 @@ export class ChessApp extends LitElement {
         class="container"
         @undo-clicked=${this.undoClicked}
         @new-game-clicked=${this.newGameClicked}
+        @ai-vs-ai-start=${this.onAIvsAIStart}
+        @ai-vs-ai-stop=${this.onAIvsAIStop}
+        @depth-changed=${this.onDepthChanged}
       >
         <chess-panel
           .playerAdvantage=${this._gameController.whiteAdvantage}
