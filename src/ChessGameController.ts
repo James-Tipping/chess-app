@@ -26,10 +26,10 @@ export class ChessGameController implements ReactiveController {
   constructor(host: ReactiveControllerHost) {
     this._host = host;
     host.addController(this);
-    this.initializeWorker();
+    this.initialiseWorker();
   }
 
-  private initializeWorker() {
+  private initialiseWorker() {
     this._worker = new Worker(
       new URL('./utils/MinimaxWorker.js', import.meta.url),
       { type: 'module' },
@@ -42,9 +42,9 @@ export class ChessGameController implements ReactiveController {
       if (bestMove && !this.isGameOver) {
         this.movePiece(bestMove);
         if (this._isAIvsAIMode && !this.isGameOver) {
-          this._aiMoveTimeout = window.setTimeout(() => {
-            this.makeAiMove();
-          }, 500);
+          // this._aiMoveTimeout = window.setTimeout(() => {
+          this.makeAiMove();
+          // }, 500);
         }
       } else if (this._isAIvsAIMode && this.isGameOver) {
         this._host.requestUpdate();
@@ -180,7 +180,7 @@ export class ChessGameController implements ReactiveController {
     }
 
     this._worker.terminate();
-    this.initializeWorker();
+    this.initialiseWorker();
 
     this._game?.reset();
     this._lastMove = null;
@@ -194,6 +194,8 @@ export class ChessGameController implements ReactiveController {
         fen: this._game?.fen(),
         depth: this._searchDepth,
       });
+    } else {
+      console.log('cant make move');
     }
   }
 

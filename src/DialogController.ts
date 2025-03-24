@@ -35,7 +35,6 @@ export default class DialogController implements ReactiveController {
   }
 
   protected dispatchCloseEvent() {
-    console.log('event caught in controller');
     if (this._host instanceof HTMLElement)
       this._host.dispatchEvent(new CloseDialogEvent());
   }
