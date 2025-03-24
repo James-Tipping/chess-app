@@ -1,5 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import './Button';
 
 export class NewGameClickedEvent extends CustomEvent<null> {
   // eslint-disable-next-line no-undef
@@ -15,6 +16,34 @@ export class UndoClickedEvent extends CustomEvent<null> {
   }
 }
 
+export class DepthChangedEvent extends CustomEvent<number> {
+  constructor(depth: number) {
+    super('depth-changed', {
+      detail: depth,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+export class AIvsAIStartEvent extends CustomEvent<void> {
+  constructor() {
+    super('ai-vs-ai-start', {
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+export class AIvsAIStopEvent extends CustomEvent<void> {
+  constructor() {
+    super('ai-vs-ai-stop', {
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
 @customElement('chess-panel')
 export class ChessPanel extends LitElement {
   static styles = css`
@@ -25,51 +54,74 @@ export class ChessPanel extends LitElement {
       border-radius: 0.2rem;
       border: 2px solid grey;
       gap: 1rem;
+      padding: 1rem;
     }
     .title {
       font-size: 3rem;
+    }
+    .info-text {
+      font-size: 1.2rem;
+      text-align: center;
     }
     .buttons-container {
       display: flex;
       justify-content: space-around;
       width: 100%;
     }
-    button {
-    background-color: #397fed;
-    color: white;
-    padding: 0.5rem;
-    border: 2px solid #2361c2;
-    border-radius: 0.3rem;
-    cursor: pointer;
+    .depth-selector {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
-    button:active {
-      animation: click-animation 0.2s;
+    .depth-selector select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 0.3rem;
     }
-    @keyframes click-animation {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(0.9);
-      }
-      100% {
-        transform {
-          scale(1)
-      }
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background-color: grey;
+      margin: 0.5rem 0;
     }
   `;
 
   @property()
   playerAdvantage: number = 0;
 
-  newGameClicked() {
+  @property()
+  positionsEvaluated: number = 0;
+
+  @property()
+  searchDepth: number = 3;
+
+  @property()
+  isAIvsAIMode: boolean = false;
+
+  protected newGameClicked() {
     this.dispatchEvent(
       new NewGameClickedEvent({ bubbles: true, composed: true }),
     );
   }
 
-  undoClicked() {
+  protected undoClicked() {
     this.dispatchEvent(new UndoClickedEvent({ bubbles: true, composed: true }));
+  }
+
+  protected depthChanged(e: Event) {
+    const select = e.target as HTMLSelectElement;
+    const depth = parseInt(select.value, 10);
+    this.dispatchEvent(new DepthChangedEvent(depth));
+  }
+
+  protected startAIvsAI() {
+    this.isAIvsAIMode = true;
+    this.dispatchEvent(new AIvsAIStartEvent());
+  }
+
+  protected stopAIvsAI() {
+    this.isAIvsAIMode = false;
+    this.dispatchEvent(new AIvsAIStopEvent());
   }
 
   render() {
@@ -77,9 +129,47 @@ export class ChessPanel extends LitElement {
       <div class="info-container">
         <div class="title">Minimax Chess Game</div>
         <div class="info-text">Your Advantage: ${this.playerAdvantage}</div>
+        <div class="info-text">
+          Positions evaluated: ${this.positionsEvaluated.toLocaleString()}
+        </div>
+
+        <div class="depth-selector">
+          <label for="depth">Search Depth:</label>
+          <select
+            id="depth"
+            .value=${this.searchDepth}
+            @change=${this.depthChanged}
+          >
+            <option value="2">2 (Fast)</option>
+            <option value="3">3 (Normal)</option>
+            <option value="4">4 (Strong)</option>
+            <option value="5">5 (Expert)</option>
+          </select>
+        </div>
+
         <div class="buttons-container">
-          <button @click=${this.newGameClicked}>New Game</button>
-          <button @click=${this.undoClicked}>Undo</button>
+          <button-element
+            @button-clicked=${this.newGameClicked}
+            label="New Game"
+          ></button-element>
+          <button-element
+            @button-clicked=${this.undoClicked}
+            label="Undo"
+          ></button-element>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="buttons-container">
+          ${this.isAIvsAIMode
+            ? html`<button-element
+                @button-clicked=${this.stopAIvsAI}
+                label="Stop AI vs AI"
+              ></button-element>`
+            : html`<button-element
+                @button-clicked=${this.startAIvsAI}
+                label="Start AI vs AI"
+              ></button-element>`}
         </div>
       </div>
     `;

@@ -1,7 +1,9 @@
 /* eslint-disable no-restricted-globals */
 import { Chess } from 'chess.js';
 import { evaluateBoard } from './Utils';
-import { WorkerMessage, WorkerResponse } from '../types/ChessBoardElementTypes';
+import { WorkerMessage, WorkerResponse } from '../types/WorkerTypes';
+
+let positionsEvaluated = 0;
 
 function minimax(
   game: Chess,
@@ -10,6 +12,8 @@ function minimax(
   alpha: number,
   beta: number,
 ): [number, string] {
+  positionsEvaluated++;
+
   if (depth === 0 || game.isGameOver()) {
     if (game.isCheckmate()) {
       return isMaximizingPlayer ? [-Infinity, ''] : [Infinity, ''];
@@ -17,7 +21,10 @@ function minimax(
     if (game.isDraw()) {
       return [0, ''];
     }
-    return [evaluateBoard(game), ''];
+    // Negate the evaluation for White's perspective
+    const evaluation =
+      game.turn() === 'w' ? -evaluateBoard(game) : evaluateBoard(game);
+    return [evaluation, ''];
   }
 
   let bestMove = '';
@@ -66,16 +73,18 @@ function minimax(
 function getBestMove(
   fen: string | undefined,
   depth: number = 3,
-): string | null {
+): [string | null, number] {
+  positionsEvaluated = 0;
   const game = new Chess(fen);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, bestMove] = minimax(game, depth, true, -Infinity, Infinity);
-
-  return bestMove;
+  const [, bestMove] = minimax(game, depth, true, -Infinity, Infinity);
+  return [bestMove, positionsEvaluated];
 }
 
 self.onmessage = (e: MessageEvent<WorkerMessage>) => {
   const { fen, depth } = e.data;
-  const bestMove = getBestMove(fen, depth);
-  self.postMessage({ bestMove } as WorkerResponse);
+  const [bestMove, positions] = getBestMove(fen, depth);
+  self.postMessage({
+    bestMove,
+    positionsEvaluated: positions,
+  } as WorkerResponse);
 };

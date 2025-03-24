@@ -35,7 +35,22 @@ export class ChessPiece extends LitElement {
       }),
     );
 
-    e.dataTransfer?.setData('text/plain', this.squareId || '');
+    if (e.dataTransfer) {
+      e.dataTransfer.setData('text/plain', this.squareId || '');
+
+      // Create a clone of the piece element for the drag image
+      const pieceElement = e.target as HTMLElement;
+      const clone = pieceElement.cloneNode(true) as HTMLElement;
+      clone.style.position = 'absolute';
+      clone.style.top = '-1000px';
+      document.body.appendChild(clone);
+
+      // Set the drag image and clean up the clone
+      e.dataTransfer.setDragImage(clone, 22, 22);
+      requestAnimationFrame(() => {
+        document.body.removeChild(clone);
+      });
+    }
   }
 
   render() {
