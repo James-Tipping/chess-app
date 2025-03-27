@@ -2,19 +2,9 @@ import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ChessPieceType, SquareColour } from '../types/ChessBoardElementTypes';
+import { ChessPieceDroppedEvent } from '../types/EventTypes';
 import '../pieces/ChessPiece';
 
-export class ChessPieceDroppedEvent extends CustomEvent<{
-  source: string;
-  target: string;
-}> {
-  constructor(
-    // eslint-disable-next-line no-undef
-    eventInitDict?: CustomEventInit<{ source: string; target: string }>,
-  ) {
-    super('chess-piece-dropped', eventInitDict);
-  }
-}
 
 @customElement('chess-square')
 export class ChessSquare extends LitElement {
@@ -94,11 +84,11 @@ export class ChessSquare extends LitElement {
         class="square ${classMap(colourClasses)}"
       >
         ${this.piece
-          ? html`<chess-piece
+        ? html`<chess-piece
               .squareId=${this.id}
               .piece=${this.piece}
             ></chess-piece>`
-          : nothing}
+        : nothing}
       </div>
     `;
   }

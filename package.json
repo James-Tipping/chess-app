@@ -1,48 +1,45 @@
 {
-  "name": "chess-app",
-  "description": "Webcomponent chess-app following open-wc recommendations",
+  "name": "my-component",
+  "description": "Webcomponent my-component following open-wc recommendations",
   "license": "GPL-3.0",
-  "author": "chess-app",
+  "author": "my-component",
   "version": "0.0.0",
   "type": "module",
+  "main": "dist/src/index.js",
+  "module": "dist/src/index.js",
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./chess-app.js": "./dist/src/ChessApp.js"
+  },
   "scripts": {
+    "analyze": "cem analyze --litelement",
+    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"web-dev-server\"",
+    "build": "tsc && npm run analyze -- --exclude dist",
+    "prepublish": "tsc && npm run analyze -- --exclude dist",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
-    "prepare": "husky",
-    "build": "rimraf dist && tsc && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
-    "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
-    "analyze": "cem analyze --litelement",
-    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"web-dev-server\""
+    "prepare": "husky"
   },
   "dependencies": {
-    "chess.js": "^1.0.0",
+    "chess.js": "^1.1.0",
     "lit": "^3.1.4"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.10.3",
     "@open-wc/eslint-config": "^12.0.3",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-node-resolve": "^15.2.3",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
     "@web/dev-server": "^0.4.6",
-    "@web/rollup-plugin-html": "^2.3.0",
-    "@web/rollup-plugin-import-meta-assets": "^2.2.1",
-    "babel-plugin-template-html-minifier": "^4.1.0",
     "concurrently": "^8.2.2",
-    "deepmerge": "^4.3.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
-    "rimraf": "^5.0.9",
-    "rollup": "^4.18.1",
-    "rollup-plugin-esbuild": "^6.1.1",
-    "rollup-plugin-workbox": "^8.1.0",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3"
   },
+  "customElements": "custom-elements.json",
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "extends": [
@@ -57,13 +54,14 @@
       "@typescript-eslint/no-unused-vars": [
         "error"
       ],
-      "no-shadow": "off",
-      "@typescript-eslint/no-shadow": "warn",
       "import/no-unresolved": "off",
-      "import/extensions": "off",
-      "no-plusplus": "off",
-      "class-methods-use-this": "off",
-      "max-classes-per-file": "off"
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "ignorePackages": true
+        }
+      ]
     }
   },
   "prettier": {
@@ -75,6 +73,5 @@
       "eslint --fix",
       "prettier --write"
     ]
-  },
-  "customElements": "custom-elements.json"
+  }
 }

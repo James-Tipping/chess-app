@@ -2,20 +2,27 @@
   "compilerOptions": {
     "target": "es2021",
     "module": "es2020",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "noEmitOnError": true,
-    "lib": ["es2021", "dom", "DOM.Iterable"],
+    "lib": [
+      "es2021",
+      "dom",
+      "DOM.Iterable"
+    ],
     "strict": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "outDir": "out-tsc",
+    "outDir": "dist",
     "sourceMap": true,
     "inlineSources": true,
     "rootDir": "./",
+    "declaration": true,
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts"
+  ]
 }

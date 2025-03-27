@@ -1,48 +1,13 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './Button';
-
-export class NewGameClickedEvent extends CustomEvent<null> {
-  // eslint-disable-next-line no-undef
-  constructor(eventInitDict?: CustomEventInit<null>) {
-    super('new-game-clicked', eventInitDict);
-  }
-}
-
-export class UndoClickedEvent extends CustomEvent<null> {
-  // eslint-disable-next-line no-undef
-  constructor(eventInitDict?: CustomEventInit<null>) {
-    super('undo-clicked', eventInitDict);
-  }
-}
-
-export class DepthChangedEvent extends CustomEvent<number> {
-  constructor(depth: number) {
-    super('depth-changed', {
-      detail: depth,
-      bubbles: true,
-      composed: true,
-    });
-  }
-}
-
-export class AIvsAIStartEvent extends CustomEvent<void> {
-  constructor() {
-    super('ai-vs-ai-start', {
-      bubbles: true,
-      composed: true,
-    });
-  }
-}
-
-export class AIvsAIStopEvent extends CustomEvent<void> {
-  constructor() {
-    super('ai-vs-ai-stop', {
-      bubbles: true,
-      composed: true,
-    });
-  }
-}
+import {
+  NewGameClickedEvent,
+  UndoClickedEvent,
+  DepthChangedEvent,
+  AIvsAIStartEvent,
+  AIvsAIStopEvent,
+} from '../types/EventTypes';
 
 @customElement('chess-panel')
 export class ChessPanel extends LitElement {
@@ -99,13 +64,11 @@ export class ChessPanel extends LitElement {
   isAIvsAIMode: boolean = false;
 
   protected newGameClicked() {
-    this.dispatchEvent(
-      new NewGameClickedEvent({ bubbles: true, composed: true }),
-    );
+    this.dispatchEvent(new NewGameClickedEvent());
   }
 
   protected undoClicked() {
-    this.dispatchEvent(new UndoClickedEvent({ bubbles: true, composed: true }));
+    this.dispatchEvent(new UndoClickedEvent());
   }
 
   protected depthChanged(e: Event) {

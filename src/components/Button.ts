@@ -1,11 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-
-export class ButtonClickedEvent extends CustomEvent<void> {
-  constructor() {
-    super('button-clicked', { bubbles: true, composed: true });
-  }
-}
+import { ButtonClickedEvent } from '../types/EventTypes';
 
 @customElement('button-element')
 export class ButtonElement extends LitElement {

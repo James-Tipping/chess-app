@@ -1,19 +1,48 @@
-## Chess App (work in progress)
+# \<my-component>
 
-A chess app using a minimax algorithm (not yet completed). The only dependencies are Lit (a lightweight framework for making web components), and chess.js for chess move validation.
+This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
 
-## Quick Start
-
-Ensure node and npm are installed on your machine. Clone the repository and install the necessary packages, by running the following in the root directory:
+## Installation
 
 ```bash
-npm i 
+npm i my-component
 ```
 
-To start the development server, run:
+## Usage
+
+```html
+<script type="module">
+  import 'my-component/my-component.js';
+</script>
+
+<my-component></my-component>
+```
+
+## Linting and formatting
+
+To scan the project for linting and formatting errors, run
 
 ```bash
-npm run start
+npm run lint
 ```
 
-The project will be available at `localhost:8000`.
+To automatically fix linting and formatting errors, run
+
+```bash
+npm run format
+```
+
+
+## Tooling configs
+
+For most of the tools, the configuration is in the `package.json` to reduce the amount of files in your project.
+
+If you customize the configuration a lot, you can consider moving them to individual files.
+
+## Local Demo with `web-dev-server`
+
+```bash
+npm start
+```
+
+To run a local development server that serves the basic demo located in `demo/index.html`
