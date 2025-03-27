@@ -1,12 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import './Button';
-
-export class CloseDialogClickedEvent extends CustomEvent<void> {
-  constructor() {
-    super('close-dialog-clicked', { bubbles: true, composed: true });
-  }
-}
+import { CloseDialogClickedEvent } from '../types/EventTypes';
 
 @customElement('dialog-element')
 export class DialogElement extends LitElement {

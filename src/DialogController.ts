@@ -7,12 +7,7 @@ import {
   TemplateResult,
 } from 'lit';
 import { DialogElement } from './components/DialogElement';
-
-export class CloseDialogEvent extends CustomEvent<void> {
-  constructor() {
-    super('close-dialog', { bubbles: true, composed: true });
-  }
-}
+import { CloseDialogEvent } from './types/EventTypes';
 
 export interface DialogProperties {
   contentRenderer: () => TemplateResult;
