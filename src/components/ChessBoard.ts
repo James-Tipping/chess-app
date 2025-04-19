@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './ChessSquare';
 import { Move, Square } from 'chess.js';
-import { ChessPieceDragStartEvent, ChessPieceDroppedEvent, ChessSquareHoverEvent, ChessSquareUnhoverEvent, RequestMoveEvent } from '../types';
+import { ChessPieceDragStartEvent, RequestMoveEvent } from '../types';
 
 @customElement('chess-board')
 export class ChessBoard extends LitElement {
@@ -49,46 +49,79 @@ export class ChessBoard extends LitElement {
     return null;
   }
 
-  onChessPieceDropped(e: ChessPieceDroppedEvent) {
-    const { source, target } = e.detail;
-    const validMoves = this.getValidMoves(source);
-    if (validMoves.includes(target)) {
-      this.dispatchEvent(new RequestMoveEvent({
-        detail: {
-          from: source,
-          to: target
-        }
-      }))
-    }
+  // --- Drag and Drop Handlers ---
+
+  dragOver(e: DragEvent) {
+    // Allow dropping
+    e.preventDefault();
   }
 
+  drop(e: DragEvent) {
+    e.preventDefault();
+    const source = e.dataTransfer?.getData('text/plain') as Square | undefined;
+    if (!source) return;
+
+    const boardRect = this.getBoundingClientRect();
+    // Assumes the board is square and squares are equal size
+    const squareSize = boardRect.width / 8;
+
+    // Calculate drop position relative to the board's top-left corner
+    const x = e.clientX - boardRect.left;
+    const y = e.clientY - boardRect.top;
+
+    // Calculate column and row index (0-7)
+    const col = Math.floor(x / squareSize);
+    const row = Math.floor(y / squareSize);
+
+    let target: Square | null = null;
+    // Check if the drop is within the board bounds
+    if (col >= 0 && col < 8 && row >= 0 && row < 8) {
+        // Convert row/col to square ID (e.g., 'a1', 'h8')
+        target = (String.fromCharCode(97 + col) + (8 - row)) as Square;
+
+        // Use the valid moves determined at the start of the drag
+        const validMoves = this.getValidMoves(source);
+        if (target && validMoves.includes(target)) {
+            this.dispatchEvent(new RequestMoveEvent({
+                detail: {
+                    from: source,
+                    to: target
+                }
+            }));
+        }
+    }
+
+    // Clear highlights after drop attempt (inside or outside board)
+    this.validMoveSquares = [];
+  }
+
+  dragEnd() {
+    // Clear highlights if drag is cancelled or ends unexpectedly
+    this.validMoveSquares = [];
+  }
+
+  // --- Custom Event Handlers ---
+
   onChessPieceDragStart(e: ChessPieceDragStartEvent) {
-    console.log('chesspiecedragstartevent');
     const { preventDrag, squareId } = e.detail;
     const validMoves = this.getValidMoves(squareId);
 
     if (validMoves.length === 0) {
       preventDrag();
+    } else {
+      // Highlight valid moves when drag starts
+      this.validMoveSquares = validMoves;
     }
-  }
-
-  onChessSquareHover(e: ChessSquareHoverEvent) {
-    const squareId = e.detail.squareId;
-    this.validMoveSquares = this.getValidMoves(squareId);
-  }
-
-  onChessSquareUnhover(e: ChessSquareUnhoverEvent) {
-    this.validMoveSquares = [];
   }
 
   render() {
     return html`
       <div
         class="board"
-        @chess-piece-dropped=${this.onChessPieceDropped}
+        @dragover=${this.dragOver}
+        @drop=${this.drop}
+        @dragend=${this.dragEnd}
         @chess-piece-drag-start=${this.onChessPieceDragStart}
-        @chess-square-hover=${this.onChessSquareHover}
-        @chess-square-unhover=${this.onChessSquareUnhover}
       >
         ${Array.from(
       { length: 64 },
