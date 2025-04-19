@@ -53,7 +53,19 @@ export class ChessPieceHoverEvent extends CustomEvent<ChessPieceHoverEventDetail
  * Chess Square Events
 */
 
-// Make a hover event for the chess square, with an interface with detail of squareId. AI!
+export interface ChessSquareHoverEventDetail {
+  squareId: Square;
+}
+
+export class ChessSquareHoverEvent extends CustomEvent<ChessSquareHoverEventDetail> {
+  constructor(customEventInit?: CustomEventInit<ChessSquareHoverEventDetail>) {
+    super('chess-square-hover', {
+      ...customEventInit,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
 
 /*
  * Chess Board Events
