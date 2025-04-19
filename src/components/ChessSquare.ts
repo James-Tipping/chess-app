@@ -4,6 +4,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { ChessPieceType, SquareColour } from '../types/ChessBoardElementTypes';
 import { ChessPieceDroppedEvent } from '../types/EventTypes';
 import '../pieces/ChessPiece';
+import { Square } from 'chess.js';
 
 
 @customElement('chess-square')
@@ -45,7 +46,9 @@ export class ChessSquare extends LitElement {
 
   @property({ type: Boolean }) to: boolean = false;
 
-  private _isLightSquare(id: string): boolean {
+  @property({ type: String }) squareId!: Square
+
+  private _isLightSquare(id: Square): boolean {
     const file = id.charCodeAt(0) - 'a'.charCodeAt(0);
     const rank = parseInt(id[1], 10) - 1;
     return (file + rank) % 2 === 1;
@@ -57,11 +60,12 @@ export class ChessSquare extends LitElement {
 
   drop(e: DragEvent) {
     e.preventDefault();
-    const data = e.dataTransfer?.getData('text/plain');
+    const data = e.dataTransfer?.getData('text/plain') as Square;
     if (data) {
+      console.log('drop data:', data);
       this.dispatchEvent(
         new ChessPieceDroppedEvent({
-          detail: { source: data, target: this.id },
+          detail: { source: data, target: this.squareId },
           bubbles: true,
           composed: true,
         }),
@@ -71,8 +75,8 @@ export class ChessSquare extends LitElement {
 
   render() {
     const colourClasses = {
-      light: this._isLightSquare(this.id),
-      dark: !this._isLightSquare(this.id),
+      light: this._isLightSquare(this.squareId),
+      dark: !this._isLightSquare(this.squareId),
       from: this.from,
       to: this.to,
     };
@@ -85,7 +89,7 @@ export class ChessSquare extends LitElement {
       >
         ${this.piece
         ? html`<chess-piece
-              .squareId=${this.id}
+              .squareId=${this.squareId}
               .piece=${this.piece}
             ></chess-piece>`
         : nothing}

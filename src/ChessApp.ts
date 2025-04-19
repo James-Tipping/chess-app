@@ -10,6 +10,7 @@ import './components/Button';
 import {
   ChessPieceDroppedEvent,
   ChessPieceDragStartEvent,
+  RequestMoveEvent,
 } from './types/EventTypes';
 import { getChessPieceColour } from './utils/Utils';
 import DialogController from './DialogController';
@@ -52,33 +53,14 @@ export class ChessApp extends LitElement {
     styles: this.dialogStyles,
   });
 
-  onDragStart(e: ChessPieceDragStartEvent) {
-    const { piece, preventDrag } = e.detail;
-    if (this._gameController?.isGameOver) {
-      preventDrag();
-      return;
-    }
-
-    const pieceColour = getChessPieceColour(piece);
-
-    if (
-      (this._gameController?.turn === ChessPieceColour.WHITE &&
-        pieceColour === ChessPieceColour.BLACK) ||
-      (this._gameController?.turn === ChessPieceColour.BLACK &&
-        pieceColour === ChessPieceColour.WHITE) ||
-      !pieceColour
-    ) {
-      preventDrag();
-    }
-  }
-
-  onDrop(e: ChessPieceDroppedEvent) {
-    const { source, target } = e.detail;
+  moveRequested(e: RequestMoveEvent) {
+    const { from, to } = e.detail;
     this._gameController?.movePiece({
-      from: source,
-      to: target,
+      from: from,
+      to: to,
       promotion: 'q',
     });
+
   }
 
   connectedCallback() {
@@ -172,6 +154,7 @@ export class ChessApp extends LitElement {
         @ai-vs-ai-start=${this.onAIvsAIStart}
         @ai-vs-ai-stop=${this.onAIvsAIStop}
         @depth-changed=${this.onDepthChanged}
+        @request-move=${this.moveRequested}
       >
         <chess-panel
           .playerAdvantage=${this._gameController.whiteAdvantage}
@@ -181,10 +164,9 @@ export class ChessApp extends LitElement {
         >
         </chess-panel>
         <chess-board
+          .getValidMoves=${this._gameController.getValidMoves}
           .lastMove=${this._gameController.lastMove}
           .fen=${this._gameController.position}
-          @chess-piece-dropped=${this.onDrop}
-          @chess-piece-drag-start=${this.onDragStart}
         ></chess-board>
       </div>
     `;

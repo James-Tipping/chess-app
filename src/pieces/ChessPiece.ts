@@ -4,20 +4,26 @@ import { customElement, property } from 'lit/decorators.js';
 import { PieceIconFactory } from './PieceIconFactory';
 import { ChessPieceType } from '../types/ChessBoardElementTypes';
 import { ChessPieceDragStartEvent } from '../types/EventTypes';
+import { Square } from 'chess.js';
 
 @customElement('chess-piece')
 export class ChessPiece extends LitElement {
   @property({ type: String }) piece: ChessPieceType | undefined;
 
-  @property({ type: String }) squareId: string | undefined;
+  @property({ type: String }) squareId: Square | undefined;
 
   dragStart(e: DragEvent) {
     const preventDrag = () => e.preventDefault();
+    if (this.squareId == null) {
+      console.error('squareId must be defined in ChessPiece');
+      preventDrag();
+      return;
+    }
     this.dispatchEvent(
       new ChessPieceDragStartEvent({
         detail: {
-          piece: this.piece || null,
           preventDrag,
+          squareId: this.squareId,
         },
         bubbles: true,
         composed: true,
@@ -25,7 +31,8 @@ export class ChessPiece extends LitElement {
     );
 
     if (e.dataTransfer) {
-      e.dataTransfer.setData('text/plain', this.squareId || '');
+      console.log('dragStart data:', this.squareId);
+      e.dataTransfer.setData('text/plain', this.squareId);
 
       // Create a clone of the piece element for the drag image
       const pieceElement = e.target as HTMLElement;
