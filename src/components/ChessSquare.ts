@@ -2,7 +2,7 @@ import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ChessPieceType, SquareColour } from '../types/ChessBoardElementTypes';
-import { ChessPieceDroppedEvent } from '../types/EventTypes';
+import { ChessPieceDroppedEvent, ChessSquareHoverEvent, ChessSquareUnhoverEvent } from '../types/EventTypes';
 import '../pieces/ChessPiece';
 import { Square } from 'chess.js';
 
@@ -36,6 +36,9 @@ export class ChessSquare extends LitElement {
     .to {
       border: 10px solid #e8dd10;
     }
+    .highlighted {
+      filter: brightness(0.5);
+    }
   `;
 
   @property({ type: String }) colour?: SquareColour;
@@ -47,6 +50,8 @@ export class ChessSquare extends LitElement {
   @property({ type: Boolean }) to: boolean = false;
 
   @property({ type: String }) squareId!: Square
+
+  @property() isHighlighted: boolean = false;
 
   private _isLightSquare(id: Square): boolean {
     const file = id.charCodeAt(0) - 'a'.charCodeAt(0);
@@ -73,16 +78,31 @@ export class ChessSquare extends LitElement {
     }
   }
 
+  onMouseOver() {
+    this.dispatchEvent(new ChessSquareHoverEvent({
+      detail: { squareId: this.squareId },
+    }))
+  }
+
+  onMouseLeave() {
+    this.dispatchEvent(new ChessSquareUnhoverEvent({
+      detail: { squareId: this.squareId },
+    }))
+  }
+
   render() {
     const colourClasses = {
       light: this._isLightSquare(this.squareId),
       dark: !this._isLightSquare(this.squareId),
       from: this.from,
       to: this.to,
+      highlighted: this.isHighlighted,
     };
 
     return html`
       <div
+        @mouseover=${this.onMouseOver}
+        @mouseleave=${this.onMouseLeave}
         @drop=${this.drop}
         @dragover=${this.dragOver}
         class="square ${classMap(colourClasses)}"

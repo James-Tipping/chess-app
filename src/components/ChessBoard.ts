@@ -1,8 +1,8 @@
 import { css, html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import './ChessSquare';
 import { Move, Square } from 'chess.js';
-import { ChessPieceDragStartEvent, ChessPieceDroppedEvent, RequestMoveEvent } from '../types';
+import { ChessPieceDragStartEvent, ChessPieceDroppedEvent, ChessSquareHoverEvent, ChessSquareUnhoverEvent, RequestMoveEvent } from '../types';
 
 @customElement('chess-board')
 export class ChessBoard extends LitElement {
@@ -20,10 +20,12 @@ export class ChessBoard extends LitElement {
 
   @property() lastMove: Move | null = null;
 
+  @state() validMoveSquares: Square[] = [];
+
   getValidMoves: (square: Square) => Square[] = () => [];
 
-  squareId(i: number): string {
-    return String.fromCharCode(97 + (i % 8)) + (8 - Math.floor(i / 8));
+  squareId(i: number): Square {
+    return String.fromCharCode(97 + (i % 8)) + (8 - Math.floor(i / 8)) as Square;
   }
 
   squarePiece(i: number, fen: string) {
@@ -70,12 +72,23 @@ export class ChessBoard extends LitElement {
     }
   }
 
+  onChessSquareHover(e: ChessSquareHoverEvent) {
+    const squareId = e.detail.squareId;
+    this.validMoveSquares = this.getValidMoves(squareId);
+  }
+
+  onChessSquareUnhover(e: ChessSquareUnhoverEvent) {
+    this.validMoveSquares = [];
+  }
+
   render() {
     return html`
       <div
         class="board"
         @chess-piece-dropped=${this.onChessPieceDropped}
         @chess-piece-drag-start=${this.onChessPieceDragStart}
+        @chess-square-hover=${this.onChessSquareHover}
+        @chess-square-unhover=${this.onChessSquareUnhover}
       >
         ${Array.from(
       { length: 64 },
@@ -84,6 +97,7 @@ export class ChessBoard extends LitElement {
               .from=${this.lastMove?.from === this.squareId(i)}
               .to=${this.lastMove?.to === this.squareId(i)}
               .squareId=${this.squareId(i)}
+              .isHighlighted=${this.validMoveSquares.includes(this.squareId(i))}
               .piece=${this.squarePiece(i, this.fen)}
             ></chess-square>
           `,
