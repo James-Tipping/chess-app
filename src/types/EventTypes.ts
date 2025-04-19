@@ -67,6 +67,8 @@ export class ChessSquareHoverEvent extends CustomEvent<ChessSquareHoverEventDeta
   }
 }
 
+// Make an event for when the chess square isn't hovered anymore. It should have the same detail as the ChessSquareHoverEvent. AI!
+
 /*
  * Chess Board Events
 */
