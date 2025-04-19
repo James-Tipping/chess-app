@@ -67,7 +67,15 @@ export class ChessSquareHoverEvent extends CustomEvent<ChessSquareHoverEventDeta
   }
 }
 
-// Make an event for when the chess square isn't hovered anymore. It should have the same detail as the ChessSquareHoverEvent. AI!
+export class ChessSquareUnhoverEvent extends CustomEvent<ChessSquareHoverEventDetail> {
+  constructor(customEventInit?: CustomEventInit<ChessSquareHoverEventDetail>) {
+    super('chess-square-unhover', {
+      ...customEventInit,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
 
 /*
  * Chess Board Events
