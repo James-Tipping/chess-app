@@ -1,8 +1,13 @@
+import { Square } from 'chess.js';
 import { ChessPieceType } from './ChessBoardElementTypes';
 
+/*
+ * Chess Piece Events
+*/
+
 export interface ChessPieceDroppedEventDetail {
-  source: string;
-  target: string;
+  source: Square;
+  target: Square;
 }
 
 export class ChessPieceDroppedEvent extends CustomEvent<ChessPieceDroppedEventDetail> {
@@ -16,13 +21,46 @@ export class ChessPieceDroppedEvent extends CustomEvent<ChessPieceDroppedEventDe
 }
 
 export interface ChessPieceDragStartEventDetail {
-  piece: ChessPieceType | null;
+  squareId: Square;
   preventDrag: () => void;
 }
 
 export class ChessPieceDragStartEvent extends CustomEvent<ChessPieceDragStartEventDetail> {
   constructor(customEventInit?: CustomEventInit<ChessPieceDragStartEventDetail>) {
     super('chess-piece-drag-start', {
+      ...customEventInit,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+export interface ChessPieceHoverEventDetail {
+  squareId: Square;
+}
+
+export class ChessPieceHoverEvent extends CustomEvent<ChessPieceHoverEventDetail> {
+  constructor(customEventInit?: CustomEventInit<ChessPieceHoverEventDetail>) {
+    super('chess-piece-hover', {
+      ...customEventInit,
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
+/*
+ * Chess Board Events
+*/
+
+export interface RequestMoveEventDetail {
+  from: Square;
+  to: Square;
+}
+
+export class RequestMoveEvent extends CustomEvent<RequestMoveEventDetail> {
+  constructor(customEventInit?: CustomEventInit<RequestMoveEventDetail>) {
+    super('request-move', {
       ...customEventInit,
       bubbles: true,
       composed: true,
@@ -56,6 +94,10 @@ export class CloseDialogClickedEvent extends CustomEvent<void> {
     });
   }
 }
+
+/*
+ * Chess Panel Events
+*/
 
 export class NewGameClickedEvent extends CustomEvent<void> {
   constructor() {

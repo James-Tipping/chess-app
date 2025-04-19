@@ -1,7 +1,8 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './ChessSquare';
-import { Move } from 'chess.js';
+import { Move, Square } from 'chess.js';
+import { ChessPieceDragStartEvent, ChessPieceDroppedEvent, RequestMoveEvent } from '../types';
 
 @customElement('chess-board')
 export class ChessBoard extends LitElement {
@@ -18,6 +19,8 @@ export class ChessBoard extends LitElement {
   @property({ type: String }) fen = '';
 
   @property() lastMove: Move | null = null;
+
+  getValidMoves: (square: Square) => Square[] = () => [];
 
   squareId(i: number): string {
     return String.fromCharCode(97 + (i % 8)) + (8 - Math.floor(i / 8));
@@ -44,20 +47,47 @@ export class ChessBoard extends LitElement {
     return null;
   }
 
+  onChessPieceDropped(e: ChessPieceDroppedEvent) {
+    const { source, target } = e.detail;
+    const validMoves = this.getValidMoves(source);
+    if (validMoves.includes(target)) {
+      this.dispatchEvent(new RequestMoveEvent({
+        detail: {
+          from: source,
+          to: target
+        }
+      }))
+    }
+  }
+
+  onChessPieceDragStart(e: ChessPieceDragStartEvent) {
+    console.log('chesspiecedragstartevent');
+    const { preventDrag, squareId } = e.detail;
+    const validMoves = this.getValidMoves(squareId);
+
+    if (validMoves.length === 0) {
+      preventDrag();
+    }
+  }
+
   render() {
     return html`
-      <div class="board">
+      <div
+        class="board"
+        @chess-piece-dropped=${this.onChessPieceDropped}
+        @chess-piece-drag-start=${this.onChessPieceDragStart}
+      >
         ${Array.from(
-          { length: 64 },
-          (_, i) => html`
+      { length: 64 },
+      (_, i) => html`
             <chess-square
               .from=${this.lastMove?.from === this.squareId(i)}
               .to=${this.lastMove?.to === this.squareId(i)}
-              id=${this.squareId(i)}
+              .squareId=${this.squareId(i)}
               .piece=${this.squarePiece(i, this.fen)}
             ></chess-square>
           `,
-        )}
+    )}
       </div>
     `;
   }

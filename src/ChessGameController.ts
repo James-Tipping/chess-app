@@ -1,6 +1,6 @@
 /* eslint-disable no-dupe-class-members */
 import { ReactiveController, ReactiveControllerHost } from 'lit';
-import { Chess, Move } from 'chess.js';
+import { Chess, Move, Square } from 'chess.js';
 import { WorkerResponse } from './types/WorkerTypes';
 import { evaluateBoard } from './utils/Utils';
 
@@ -74,10 +74,10 @@ export class ChessGameController implements ReactiveController {
   movePiece(
     moveParams:
       | {
-          from: string;
-          to: string;
-          promotion: string;
-        }
+        from: string;
+        to: string;
+        promotion: string;
+      }
       | string
       | Move,
   ): void {
@@ -151,6 +151,12 @@ export class ChessGameController implements ReactiveController {
 
   get isAIvsAIMode(): boolean {
     return this._isAIvsAIMode;
+  }
+
+  getValidMoves = (squareId: Square) => {
+    const moves = this._game?.moves({ square: squareId, verbose: true }) || [];
+    const squaresToMoveTo = moves.map((move) => move.to);
+    return squaresToMoveTo;
   }
 
   startAIvsAIMode() {

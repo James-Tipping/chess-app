@@ -15,6 +15,9 @@
 ## temp folders
 /.tmp/
 
+# aider files
+.aider*
+
 # build
 /_site/
 /dist/
