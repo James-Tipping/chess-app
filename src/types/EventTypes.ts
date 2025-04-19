@@ -50,6 +50,12 @@ export class ChessPieceHoverEvent extends CustomEvent<ChessPieceHoverEventDetail
 }
 
 /*
+ * Chess Square Events
+*/
+
+// Make a hover event for the chess square, with an interface with detail of squareId. AI!
+
+/*
  * Chess Board Events
 */
 
