@@ -7,18 +7,32 @@
   "type": "module",
   "main": "dist/src/index.js",
   "module": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "exports": {
-    ".": "./dist/src/index.js",
-    "./chess-app.js": "./dist/src/ChessApp.js"
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./chess-app.js": {
+      "import": "./dist/src/ChessApp.js",
+      "types": "./dist/src/ChessApp.d.ts"
+    }
   },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "LICENSE.thirdparty",
+    "custom-elements.json"
+  ],
   "scripts": {
     "analyze": "cem analyze --litelement",
     "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"web-dev-server\"",
     "build": "tsc && npm run analyze -- --exclude dist",
-    "prepublish": "tsc && npm run analyze -- --exclude dist",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "chess.js": "^1.1.0",
