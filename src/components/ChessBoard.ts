@@ -2,7 +2,8 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './ChessSquare';
 import { Move, Square } from 'chess.js';
-import { ChessPieceDragStartEvent, RequestMoveEvent } from '../types';
+import { ChessPieceDragStartEvent, ChessSquareHoverEvent, ChessSquareUnhoverEvent, RequestMoveEvent } from '../types';
+import { ChessPiece } from '../pieces';
 
 @customElement('chess-board')
 export class ChessBoard extends LitElement {
@@ -51,6 +52,45 @@ export class ChessBoard extends LitElement {
 
   // --- Drag and Drop Handlers ---
 
+  dragStart(e: DragEvent) {
+    const sourcePiece = e.composedPath()[0] as ChessPiece | null;
+    // const sourcePiece = ((e.target as HTMLElement).closest('chess-piece')) as ChessPiece | null;
+    const squareId = sourcePiece?.squareId;
+
+    if (squareId == null || sourcePiece == null) {
+      e.preventDefault();
+      return;
+    }
+
+    const validMoves = this.getValidMoves(squareId);
+
+    if (validMoves.length === 0) {
+      e.preventDefault();
+      return;
+    } else {
+      // Highlight valid moves when drag starts
+      this.validMoveSquares = validMoves;
+    }
+
+    if (e.dataTransfer) {
+      console.log('dragStart data:', squareId);
+      e.dataTransfer.setData('text/plain', squareId);
+
+      // Create a clone of the piece element for the drag image
+      const pieceElement = e.target as HTMLElement;
+      const clone = sourcePiece.cloneNode(true) as HTMLElement;
+      clone.style.position = 'absolute';
+      clone.style.top = '-1000px';
+      document.body.appendChild(clone);
+
+      // Set the drag image and clean up the clone
+      e.dataTransfer.setDragImage(clone, 22, 22);
+      requestAnimationFrame(() => {
+        document.body.removeChild(clone);
+      });
+    }
+  }
+
   dragOver(e: DragEvent) {
     // Allow dropping
     e.preventDefault();
@@ -76,19 +116,19 @@ export class ChessBoard extends LitElement {
     let target: Square | null = null;
     // Check if the drop is within the board bounds
     if (col >= 0 && col < 8 && row >= 0 && row < 8) {
-        // Convert row/col to square ID (e.g., 'a1', 'h8')
-        target = (String.fromCharCode(97 + col) + (8 - row)) as Square;
+      // Convert row/col to square ID (e.g., 'a1', 'h8')
+      target = (String.fromCharCode(97 + col) + (8 - row)) as Square;
 
-        // Use the valid moves determined at the start of the drag
-        const validMoves = this.getValidMoves(source);
-        if (target && validMoves.includes(target)) {
-            this.dispatchEvent(new RequestMoveEvent({
-                detail: {
-                    from: source,
-                    to: target
-                }
-            }));
-        }
+      // Use the valid moves determined at the start of the drag
+      const validMoves = this.getValidMoves(source);
+      if (target && validMoves.includes(target)) {
+        this.dispatchEvent(new RequestMoveEvent({
+          detail: {
+            from: source,
+            to: target
+          }
+        }));
+      }
     }
 
     // Clear highlights after drop attempt (inside or outside board)
@@ -114,6 +154,16 @@ export class ChessBoard extends LitElement {
     }
   }
 
+  onChessSquareHover(e: ChessSquareHoverEvent) {
+    const squareId = e.detail.squareId;
+    this.validMoveSquares = this.getValidMoves(squareId);
+  }
+
+  onChessSquareUnhover(e: ChessSquareUnhoverEvent) {
+    this.validMoveSquares = [];
+  }
+
+
   render() {
     return html`
       <div
@@ -121,7 +171,10 @@ export class ChessBoard extends LitElement {
         @dragover=${this.dragOver}
         @drop=${this.drop}
         @dragend=${this.dragEnd}
+        @dragstart=${this.dragStart}
         @chess-piece-drag-start=${this.onChessPieceDragStart}
+        @chess-square-hover=${this.onChessSquareHover}
+        @chess-square-unhover=${this.onChessSquareUnhover}
       >
         ${Array.from(
       { length: 64 },
