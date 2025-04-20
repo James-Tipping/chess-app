@@ -1,8 +1,8 @@
 {
-  "name": "my-component",
-  "description": "Webcomponent my-component following open-wc recommendations",
+  "name": "minimax-chess-component",
+  "description": "A web component using a minimax algorithm, Lit, and chess.js to provide an AI powered chess game",
   "license": "GPL-3.0",
-  "author": "my-component",
+  "author": "James Tipping",
   "version": "0.0.0",
   "type": "module",
   "main": "dist/src/index.js",
