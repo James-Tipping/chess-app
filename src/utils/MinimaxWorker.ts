@@ -84,11 +84,14 @@ function getBestMove(
   return [bestMove, positionsEvaluated];
 }
 
-self.onmessage = (e: MessageEvent<WorkerMessage>) => {
-  const { fen, depth } = e.data;
-  const [bestMove, positions] = getBestMove(fen, depth);
-  self.postMessage({
-    bestMove,
-    positionsEvaluated: positions,
-  } as WorkerResponse);
-};
+// Only set up the message handler if running in a worker context
+if (typeof self !== 'undefined' && typeof self.postMessage === 'function') {
+  self.onmessage = (e: MessageEvent<WorkerMessage>) => {
+    const { fen, depth } = e.data;
+    const [bestMove, positions] = getBestMove(fen, depth);
+    self.postMessage({
+      bestMove,
+      positionsEvaluated: positions,
+    } as WorkerResponse);
+  };
+}
