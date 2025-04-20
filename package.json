@@ -16,6 +16,10 @@
     "./chess-app.js": {
       "import": "./dist/src/ChessApp.js",
       "types": "./dist/src/ChessApp.d.ts"
+    },
+    "./chess-board.js": {
+      "import": "./dist/src/components/ChessBoard.js",
+      "types": "./dist/src/components/ChessBoard.d.ts"
     }
   },
   "files": [
