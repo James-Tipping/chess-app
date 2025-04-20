@@ -11,8 +11,9 @@ export class QueenPieceIcon extends AbstractBasePieceIcon {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           version="1.1"
-          width="45"
-          height="45"
+          width="${this.size}"
+          height="${this.size}"
+          viewBox="0 0 45 45"
         >
           <g
             style="fill:#ffffff;stroke:#000000;stroke-width:1.5;stroke-linejoin:round"
@@ -38,8 +39,9 @@ export class QueenPieceIcon extends AbstractBasePieceIcon {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
-        width="45"
-        height="45"
+        width="${this.size}"
+        height="${this.size}"
+        viewBox="0 0 45 45"
       >
         <g
           style="fill:#000000;stroke:#000000;stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round"

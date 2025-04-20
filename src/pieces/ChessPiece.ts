@@ -11,6 +11,8 @@ export class ChessPiece extends LitElement {
 
   @property({ type: String }) squareId: Square | undefined;
 
+  @property({ type: Number }) size: number = 45; // Default size, matches icon default
+
   connectedCallback() {
     /* eslint-disable-next-line wc/guard-super-call */
     super.connectedCallback();
@@ -26,7 +28,7 @@ export class ChessPiece extends LitElement {
   render() {
     return html`
       <div>
-        ${PieceIconFactory.createPiece(this.piece)}
+        ${PieceIconFactory.createPiece(this.piece, this.size)}
       </div>
     `;
   }
