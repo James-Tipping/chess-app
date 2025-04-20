@@ -21,9 +21,9 @@ export class ChessBoard extends LitElement {
 
   @property() lastMove: Move | null = null;
 
-  @state() validMoveSquares: Square[] = [];
+  @state() protected _validMoveSquares: Square[] = [];
 
-  getValidMoves: (square: Square) => Square[] = () => [];
+  validMovesProvider: (square: Square) => Square[] = () => [];
 
   squareId(i: number): Square {
     return String.fromCharCode(97 + (i % 8)) + (8 - Math.floor(i / 8)) as Square;
@@ -62,18 +62,17 @@ export class ChessBoard extends LitElement {
       return;
     }
 
-    const validMoves = this.getValidMoves(squareId);
+    const validMoves = this.validMovesProvider(squareId);
 
     if (validMoves.length === 0) {
       e.preventDefault();
       return;
     } else {
       // Highlight valid moves when drag starts
-      this.validMoveSquares = validMoves;
+      this._validMoveSquares = validMoves;
     }
 
     if (e.dataTransfer) {
-      console.log('dragStart data:', squareId);
       e.dataTransfer.setData('text/plain', squareId);
 
       // Access the rendered content (shadow root) of the ChessPiece
@@ -99,7 +98,7 @@ export class ChessBoard extends LitElement {
         // Clean up the clone shortly after
         requestAnimationFrame(() => {
           if (document.body.contains(clone)) {
-             document.body.removeChild(clone);
+            document.body.removeChild(clone);
           }
         });
       } else {
@@ -137,7 +136,7 @@ export class ChessBoard extends LitElement {
       target = (String.fromCharCode(97 + col) + (8 - row)) as Square;
 
       // Use the valid moves determined at the start of the drag
-      const validMoves = this.getValidMoves(source);
+      const validMoves = this.validMovesProvider(source);
       if (target && validMoves.includes(target)) {
         this.dispatchEvent(new RequestMoveEvent({
           detail: {
@@ -149,35 +148,35 @@ export class ChessBoard extends LitElement {
     }
 
     // Clear highlights after drop attempt (inside or outside board)
-    this.validMoveSquares = [];
+    this._validMoveSquares = [];
   }
 
   dragEnd() {
     // Clear highlights if drag is cancelled or ends unexpectedly
-    this.validMoveSquares = [];
+    this._validMoveSquares = [];
   }
 
   // --- Custom Event Handlers ---
 
   onChessPieceDragStart(e: ChessPieceDragStartEvent) {
     const { preventDrag, squareId } = e.detail;
-    const validMoves = this.getValidMoves(squareId);
+    const validMoves = this.validMovesProvider(squareId);
 
     if (validMoves.length === 0) {
       preventDrag();
     } else {
       // Highlight valid moves when drag starts
-      this.validMoveSquares = validMoves;
+      this._validMoveSquares = validMoves;
     }
   }
 
   onChessSquareHover(e: ChessSquareHoverEvent) {
     const squareId = e.detail.squareId;
-    this.validMoveSquares = this.getValidMoves(squareId);
+    this._validMoveSquares = this.validMovesProvider(squareId);
   }
 
   onChessSquareUnhover(e: ChessSquareUnhoverEvent) {
-    this.validMoveSquares = [];
+    this._validMoveSquares = [];
   }
 
 
@@ -200,7 +199,7 @@ export class ChessBoard extends LitElement {
               .from=${this.lastMove?.from === this.squareId(i)}
               .to=${this.lastMove?.to === this.squareId(i)}
               .squareId=${this.squareId(i)}
-              .isHighlighted=${this.validMoveSquares.includes(this.squareId(i))}
+              .isHighlighted=${this._validMoveSquares.includes(this.squareId(i))}
               .piece=${this.squarePiece(i, this.fen)}
             ></chess-square>
           `,

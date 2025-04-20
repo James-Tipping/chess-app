@@ -8,11 +8,9 @@ import './components/ChessBoard';
 import './components/ChessPanel';
 import './components/Button';
 import {
-  ChessPieceDroppedEvent,
-  ChessPieceDragStartEvent,
+  DepthChangedEvent,
   RequestMoveEvent,
 } from './types/EventTypes';
-import { getChessPieceColour } from './utils/Utils';
 import DialogController from './DialogController';
 
 @customElement('chess-app')
@@ -132,9 +130,8 @@ export class ChessApp extends LitElement {
     this._dialogController.hide();
   }
 
-  protected onDepthChanged(e: Event) {
-    const customEvent = e as CustomEvent<number>;
-    this._gameController.searchDepth = customEvent.detail;
+  protected onDepthChanged(e: DepthChangedEvent) {
+    this._gameController.searchDepth = e.detail.depth;
   }
 
   protected onAIvsAIStart() {
@@ -164,7 +161,7 @@ export class ChessApp extends LitElement {
         >
         </chess-panel>
         <chess-board
-          .getValidMoves=${this._gameController.getValidMoves}
+          .validMovesProvider=${this._gameController.getValidMoves}
           .lastMove=${this._gameController.lastMove}
           .fen=${this._gameController.position}
         ></chess-board>

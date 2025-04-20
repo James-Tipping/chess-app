@@ -11,7 +11,7 @@ export class ChessPiece extends LitElement {
 
   @property({ type: String }) squareId: Square | undefined;
 
-  @property({ type: Number }) size: number = 45; // Default size, matches icon default
+  @property({ type: Number }) size: number = 70; // Default size, matches icon default
 
   connectedCallback() {
     /* eslint-disable-next-line wc/guard-super-call */
