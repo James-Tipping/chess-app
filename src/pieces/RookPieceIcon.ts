@@ -11,8 +11,9 @@ export class RookPieceIcon extends AbstractBasePieceIcon {
         <svg
           xmlns="http://www.w3.org/2000/svg"
           version="1.1"
-          width="45"
-          height="45"
+          width="${this.size}"
+          height="${this.size}"
+          viewBox="0 0 45 45"
         >
           <g
             style="opacity:1; fill:#ffffff; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;"
@@ -48,8 +49,9 @@ export class RookPieceIcon extends AbstractBasePieceIcon {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
-        width="45"
-        height="45"
+        width="${this.size}"
+        height="${this.size}"
+        viewBox="0 0 45 45"
       >
         <g
           style="opacity:1; fill:#000000; fill-opacity:1; fill-rule:evenodd; stroke:#000000; stroke-width:1.5; stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4; stroke-dasharray:none; stroke-opacity:1;"
