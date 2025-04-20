@@ -76,18 +76,35 @@ export class ChessBoard extends LitElement {
       console.log('dragStart data:', squareId);
       e.dataTransfer.setData('text/plain', squareId);
 
-      // Create a clone of the piece element for the drag image
-      const pieceElement = e.target as HTMLElement;
-      const clone = sourcePiece.cloneNode(true) as HTMLElement;
-      clone.style.position = 'absolute';
-      clone.style.top = '-1000px';
-      document.body.appendChild(clone);
+      // Access the rendered content (shadow root) of the ChessPiece
+      const shadow = sourcePiece.renderRoot;
+      // Find the inner div that contains the SVG icon
+      const innerDiv = shadow.querySelector('div');
 
-      // Set the drag image and clean up the clone
-      e.dataTransfer.setDragImage(clone, 22, 22);
-      requestAnimationFrame(() => {
-        document.body.removeChild(clone);
-      });
+      if (innerDiv) {
+        // Clone the *inner div* for the drag image
+        const clone = innerDiv.cloneNode(true) as HTMLElement;
+        // Ensure clone styles don't interfere and it's positioned off-screen
+        clone.style.position = 'absolute';
+        clone.style.left = '-100px'; // Position off-screen
+        clone.style.top = '-100px';
+        clone.style.zIndex = '-1'; // Ensure it's not visible or interactive
+        clone.style.pointerEvents = 'none';
+        document.body.appendChild(clone);
+
+        // Set the drag image using the cloned inner div
+        // Adjust offset (22, 22) as needed for centering
+        e.dataTransfer.setDragImage(clone, 22, 22);
+
+        // Clean up the clone shortly after
+        requestAnimationFrame(() => {
+          if (document.body.contains(clone)) {
+             document.body.removeChild(clone);
+          }
+        });
+      } else {
+        console.warn("Could not find inner div to clone for drag image.");
+      }
     }
   }
 
