@@ -25,10 +25,13 @@ export class ChessGameController implements ReactiveController {
   constructor(host: ReactiveControllerHost) {
     this._host = host;
     host.addController(this);
-    this.initialiseWorker();
+    // Worker initialization moved to hostConnected
   }
 
   private initialiseWorker() {
+    // Ensure this only runs client-side
+    if (typeof window === 'undefined') return;
+
     this._worker = new Worker(
       new URL('./utils/MinimaxWorker.js', import.meta.url),
       { type: 'module' },
@@ -51,10 +54,16 @@ export class ChessGameController implements ReactiveController {
 
   hostConnected() {
     this._game = new Chess();
+    // Initialize worker only in the browser
+    if (typeof window !== 'undefined') {
+      this.initialiseWorker();
+    }
   }
 
   hostDisconnected() {
     this._game = null;
+    // Terminate worker if it exists
+    this._worker?.terminate();
   }
 
   resetGame() {
@@ -173,8 +182,12 @@ export class ChessGameController implements ReactiveController {
     this._isAIvsAIMode = false;
     this._isThinking = false;
 
-    this._worker.terminate();
-    this.initialiseWorker();
+    // Terminate existing worker if it exists
+    this._worker?.terminate();
+    // Re-initialize worker only in the browser
+    if (typeof window !== 'undefined') {
+      this.initialiseWorker();
+    }
 
     this._game?.reset();
     this._lastMove = null;
@@ -182,7 +195,8 @@ export class ChessGameController implements ReactiveController {
   }
 
   makeAiMove() {
-    if (!this._isThinking && !this.isGameOver) {
+    // Ensure worker exists and we are in a browser context before posting message
+    if (this._worker && typeof window !== 'undefined' && !this._isThinking && !this.isGameOver) {
       this._isThinking = true;
       this._worker.postMessage({
         fen: this._game?.fen(),
