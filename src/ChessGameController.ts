@@ -19,7 +19,6 @@ export class ChessGameController implements ReactiveController {
 
   private _isAIvsAIMode: boolean = false;
 
-  private _aiMoveTimeout: number | null = null;
 
   private _isThinking: boolean = false;
 
@@ -42,9 +41,7 @@ export class ChessGameController implements ReactiveController {
       if (bestMove && !this.isGameOver) {
         this.movePiece(bestMove);
         if (this._isAIvsAIMode && !this.isGameOver) {
-          // this._aiMoveTimeout = window.setTimeout(() => {
           this.makeAiMove();
-          // }, 500);
         }
       } else if (this._isAIvsAIMode && this.isGameOver) {
         this._host.requestUpdate();
@@ -160,10 +157,6 @@ export class ChessGameController implements ReactiveController {
   }
 
   startAIvsAIMode() {
-    if (this._aiMoveTimeout) {
-      window.clearTimeout(this._aiMoveTimeout);
-      this._aiMoveTimeout = null;
-    }
 
     this._isAIvsAIMode = true;
     this._game?.reset();
@@ -179,11 +172,6 @@ export class ChessGameController implements ReactiveController {
   stopAIvsAIMode() {
     this._isAIvsAIMode = false;
     this._isThinking = false;
-
-    if (this._aiMoveTimeout) {
-      window.clearTimeout(this._aiMoveTimeout);
-      this._aiMoveTimeout = null;
-    }
 
     this._worker.terminate();
     this.initialiseWorker();
@@ -201,7 +189,7 @@ export class ChessGameController implements ReactiveController {
         depth: this._searchDepth,
       });
     } else {
-      console.log('cant make move');
+      console.warn('cant make move');
     }
   }
 

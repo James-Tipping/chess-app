@@ -2,6 +2,7 @@ import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ChessPieceType, SquareColour } from '../types/ChessBoardElementTypes';
+import { ChessPieceDroppedEvent, ChessSquareHoverEvent, ChessSquareUnhoverEvent } from '../types/EventTypes';
 import '../pieces/ChessPiece';
 import { Square } from 'chess.js';
 
@@ -58,6 +59,18 @@ export class ChessSquare extends LitElement {
     return (file + rank) % 2 === 1;
   }
 
+  onMouseOver() {
+    this.dispatchEvent(new ChessSquareHoverEvent({
+      detail: { squareId: this.squareId },
+    }))
+  }
+
+  onMouseLeave() {
+    this.dispatchEvent(new ChessSquareUnhoverEvent({
+      detail: { squareId: this.squareId },
+    }))
+  }
+
   render() {
     const colourClasses = {
       light: this._isLightSquare(this.squareId),
@@ -69,6 +82,8 @@ export class ChessSquare extends LitElement {
 
     return html`
       <div
+        @mouseover=${this.onMouseOver}
+        @mouseleave=${this.onMouseLeave}
         class="square ${classMap(colourClasses)}"
       >
         ${this.piece
