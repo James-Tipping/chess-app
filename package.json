@@ -68,18 +68,20 @@
       "@typescript-eslint"
     ],
     "rules": {
+      "class-methods-use-this": "off",
+      "no-undef": "off",
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "error"
-      ],
+      "max-classes-per-file": "off",
+      "@typescript-eslint/no-unused-vars": "error",
+      "no-plusplus": "off",
       "import/no-unresolved": "off",
       "import/extensions": [
-        "error",
-        "always",
-        {
-          "ignorePackages": true
-        }
-      ]
+      "error",
+      {
+        "ts": "never",
+        "js": "always" 
+      }
+    ]
     }
   },
   "prettier": {

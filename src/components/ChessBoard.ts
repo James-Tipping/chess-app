@@ -2,7 +2,11 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './ChessSquare';
 import { Move, Square } from 'chess.js';
-import { ChessPieceDragStartEvent, ChessSquareHoverEvent, ChessSquareUnhoverEvent, RequestMoveEvent } from '../types';
+import {
+  ChessPieceDragStartEvent,
+  ChessSquareHoverEvent,
+  RequestMoveEvent,
+} from '../types';
 import { ChessPiece } from '../pieces';
 
 @customElement('chess-board')
@@ -26,7 +30,8 @@ export class ChessBoard extends LitElement {
   validMovesProvider: (square: Square) => Square[] = () => [];
 
   squareId(i: number): Square {
-    return String.fromCharCode(97 + (i % 8)) + (8 - Math.floor(i / 8)) as Square;
+    return (String.fromCharCode(97 + (i % 8)) +
+      (8 - Math.floor(i / 8))) as Square;
   }
 
   squarePiece(i: number, fen: string) {
@@ -67,10 +72,10 @@ export class ChessBoard extends LitElement {
     if (validMoves.length === 0) {
       e.preventDefault();
       return;
-    } else {
-      // Highlight valid moves when drag starts
-      this._validMoveSquares = validMoves;
     }
+
+    // Highlight valid moves when drag starts
+    this._validMoveSquares = validMoves;
 
     if (e.dataTransfer) {
       e.dataTransfer.setData('text/plain', squareId);
@@ -102,7 +107,7 @@ export class ChessBoard extends LitElement {
           }
         });
       } else {
-        console.warn("Could not find inner div to clone for drag image.");
+        console.warn('Could not find inner div to clone for drag image.');
       }
     }
   }
@@ -138,12 +143,14 @@ export class ChessBoard extends LitElement {
       // Use the valid moves determined at the start of the drag
       const validMoves = this.validMovesProvider(source);
       if (target && validMoves.includes(target)) {
-        this.dispatchEvent(new RequestMoveEvent({
-          detail: {
-            from: source,
-            to: target
-          }
-        }));
+        this.dispatchEvent(
+          new RequestMoveEvent({
+            detail: {
+              from: source,
+              to: target,
+            },
+          }),
+        );
       }
     }
 
@@ -171,14 +178,13 @@ export class ChessBoard extends LitElement {
   }
 
   onChessSquareHover(e: ChessSquareHoverEvent) {
-    const squareId = e.detail.squareId;
+    const { squareId } = e.detail;
     this._validMoveSquares = this.validMovesProvider(squareId);
   }
 
-  onChessSquareUnhover(e: ChessSquareUnhoverEvent) {
+  onChessSquareUnhover() {
     this._validMoveSquares = [];
   }
-
 
   render() {
     return html`
@@ -193,17 +199,19 @@ export class ChessBoard extends LitElement {
         @chess-square-unhover=${this.onChessSquareUnhover}
       >
         ${Array.from(
-      { length: 64 },
-      (_, i) => html`
+          { length: 64 },
+          (_, i) => html`
             <chess-square
               .from=${this.lastMove?.from === this.squareId(i)}
               .to=${this.lastMove?.to === this.squareId(i)}
               .squareId=${this.squareId(i)}
-              .isHighlighted=${this._validMoveSquares.includes(this.squareId(i))}
+              .isHighlighted=${this._validMoveSquares.includes(
+                this.squareId(i),
+              )}
               .piece=${this.squarePiece(i, this.fen)}
             ></chess-square>
           `,
-    )}
+        )}
       </div>
     `;
   }
