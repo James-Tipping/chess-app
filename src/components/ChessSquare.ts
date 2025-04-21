@@ -27,11 +27,6 @@ export class ChessSquare extends LitElement {
     .dark {
       background-color: #b58863;
     }
-    .square-id {
-      position: absolute;
-      bottom: 5px;
-      left: 5px;
-    }
     .from {
       border: 10px solid #c4bf5c;
     }
@@ -61,7 +56,7 @@ export class ChessSquare extends LitElement {
     return (file + rank) % 2 === 1;
   }
 
-  onMouseOver() {
+  protected onMouseOver() {
     this.dispatchEvent(
       new ChessSquareHoverEvent({
         detail: { squareId: this.squareId },
@@ -69,7 +64,7 @@ export class ChessSquare extends LitElement {
     );
   }
 
-  onMouseLeave() {
+  protected onMouseLeave() {
     this.dispatchEvent(
       new ChessSquareUnhoverEvent({
         detail: { squareId: this.squareId },
