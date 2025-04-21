@@ -7,10 +7,7 @@ import { ChessGameController } from './ChessGameController';
 import './components/ChessBoard';
 import './components/ChessPanel';
 import './components/Button';
-import {
-  DepthChangedEvent,
-  RequestMoveEvent,
-} from './types/EventTypes';
+import { DepthChangedEvent, RequestMoveEvent } from './types/EventTypes';
 import DialogController from './DialogController';
 
 @customElement('chess-app')
@@ -30,12 +27,12 @@ export class ChessApp extends LitElement {
   @state()
   private _dialogMessage?: string;
 
-  dialogContent = () => html`
+  protected dialogContent = () => html`
     <div class="title">Game Over!</div>
     <div class="message">${this._dialogMessage}</div>
   `;
 
-  dialogStyles = css`
+  protected dialogStyles = css`
     ::slotted(.title) {
       font-size: 3rem;
       text-align: center;
@@ -51,14 +48,13 @@ export class ChessApp extends LitElement {
     styles: this.dialogStyles,
   });
 
-  moveRequested(e: RequestMoveEvent) {
+  protected moveRequested(e: RequestMoveEvent) {
     const { from, to } = e.detail;
     this._gameController?.movePiece({
-      from: from,
-      to: to,
+      from,
+      to,
       promotion: 'q',
     });
-
   }
 
   connectedCallback() {
@@ -73,7 +69,7 @@ export class ChessApp extends LitElement {
     this.removeEventListener('close-dialog', this.closeDialog);
   }
 
-  closeDialog = () => this._dialogController.hide();
+  protected closeDialog = () => this._dialogController.hide();
 
   protected async updated(_changedProperties: PropertyValues) {
     super.updated(_changedProperties);
@@ -114,19 +110,19 @@ export class ChessApp extends LitElement {
     }
   }
 
-  newGameClicked() {
+  protected newGameClicked() {
     this._gameController.newGame();
   }
 
-  undoClicked() {
+  protected undoClicked() {
     this._gameController.undoMove();
   }
 
-  show() {
+  protected show() {
     this._dialogController.show();
   }
 
-  hide() {
+  protected hide() {
     this._dialogController.hide();
   }
 

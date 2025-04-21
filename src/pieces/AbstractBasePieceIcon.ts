@@ -4,7 +4,8 @@ import { ChessPieceColour } from '../types/ChessBoardElementTypes';
 
 export abstract class AbstractBasePieceIcon extends LitElement {
   @property({ type: String }) colour?: ChessPieceColour;
-  @property({ type: Number }) size: number = 45; // Default size
+
+  @property({ type: Number }) size: number = 70; // Default size
 
   constructor(colour: ChessPieceColour, size?: number) {
     super();

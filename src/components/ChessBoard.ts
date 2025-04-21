@@ -23,18 +23,18 @@ export class ChessBoard extends LitElement {
 
   @property({ type: String }) fen = '';
 
-  @property() lastMove: Move | null = null;
+  @property({ type: Object }) lastMove?: Move | null = null;
 
   @state() protected _validMoveSquares: Square[] = [];
 
   validMovesProvider: (square: Square) => Square[] = () => [];
 
-  squareId(i: number): Square {
+  protected squareId(i: number): Square {
     return (String.fromCharCode(97 + (i % 8)) +
       (8 - Math.floor(i / 8))) as Square;
   }
 
-  squarePiece(i: number, fen: string) {
+  protected squarePiece(i: number, fen: string) {
     const position = fen.split(' ')[0];
     const rows = position.split('/');
     let squareIndex = 0;
@@ -57,7 +57,7 @@ export class ChessBoard extends LitElement {
 
   // --- Drag and Drop Handlers ---
 
-  dragStart(e: DragEvent) {
+  protected dragStart(e: DragEvent) {
     const sourcePiece = e.composedPath()[0] as ChessPiece | null;
     // const sourcePiece = ((e.target as HTMLElement).closest('chess-piece')) as ChessPiece | null;
     const squareId = sourcePiece?.squareId;
@@ -112,12 +112,12 @@ export class ChessBoard extends LitElement {
     }
   }
 
-  dragOver(e: DragEvent) {
+  protected dragOver(e: DragEvent) {
     // Allow dropping
     e.preventDefault();
   }
 
-  drop(e: DragEvent) {
+  protected drop(e: DragEvent) {
     e.preventDefault();
     const source = e.dataTransfer?.getData('text/plain') as Square | undefined;
     if (!source) return;
@@ -158,14 +158,14 @@ export class ChessBoard extends LitElement {
     this._validMoveSquares = [];
   }
 
-  dragEnd() {
+  protected dragEnd() {
     // Clear highlights if drag is cancelled or ends unexpectedly
     this._validMoveSquares = [];
   }
 
   // --- Custom Event Handlers ---
 
-  onChessPieceDragStart(e: ChessPieceDragStartEvent) {
+  protected onChessPieceDragStart(e: ChessPieceDragStartEvent) {
     const { preventDrag, squareId } = e.detail;
     const validMoves = this.validMovesProvider(squareId);
 
@@ -177,12 +177,12 @@ export class ChessBoard extends LitElement {
     }
   }
 
-  onChessSquareHover(e: ChessSquareHoverEvent) {
+  protected onChessSquareHover(e: ChessSquareHoverEvent) {
     const { squareId } = e.detail;
     this._validMoveSquares = this.validMovesProvider(squareId);
   }
 
-  onChessSquareUnhover() {
+  protected onChessSquareUnhover() {
     this._validMoveSquares = [];
   }
 
