@@ -3,12 +3,12 @@ import { LitElement, PropertyValues, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { ChessPieceColour } from './types/ChessBoardElementTypes';
 import { DialogMessage } from './types/DialogTypes';
-import { ChessGameController } from './ChessGameController';
+import { ChessGameController } from './controllers/ChessGameController';
 import './components/ChessBoard';
 import './components/ChessPanel';
 import './components/Button';
 import { DepthChangedEvent, RequestMoveEvent } from './types/EventTypes';
-import DialogController from './DialogController';
+import { DialogController } from './controllers/DialogController';
 
 @customElement('chess-app')
 export class ChessApp extends LitElement {

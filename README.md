@@ -5,6 +5,7 @@ This web component provides a playable chess game, including AI capabilities. It
 The only dependencies are Lit (a lightweight framework for creating web components), and chess.js which is used for move validation.
 
 A custom minimax algorithm is used to find the best move for the AI. An AI vs AI mode is provided to demonstrate the AI capabilities.
+As the minimax algorithm is tree based, the search depth can be controlled, which corresponds to how far down the tree the algorithm searches. The deeper the search, the better the AI's move will be, but the longer it will take to calculate. To prevent the UI freezing during the calculation, a web worker is used to run the algorithm in a separate thread.
 
 ![minimax-chess-component](./app-screenshot.png)
 
@@ -20,7 +21,7 @@ npm i minimax-chess-component
 npm run start
 ```
 
-To run a local development server that serves the basic demo located in `demo/index.html`
+To run a local development server that serves the demo located in `demo/index.html`
 
 ## Rendering component in an HTML file
 
