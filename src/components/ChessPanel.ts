@@ -51,16 +51,16 @@ export class ChessPanel extends LitElement {
     }
   `;
 
-  @property()
+  @property({ type: Number })
   playerAdvantage: number = 0;
 
-  @property()
+  @property({ type: Number })
   positionsEvaluated: number = 0;
 
-  @property()
+  @property({ type: Number })
   searchDepth: number = 3;
 
-  @property()
+  @property({ type: Boolean })
   isAIvsAIMode: boolean = false;
 
   protected newGameClicked() {
@@ -100,7 +100,7 @@ export class ChessPanel extends LitElement {
           <label for="depth">Search Depth:</label>
           <select
             id="depth"
-            .value=${this.searchDepth}
+            .value=${this.searchDepth.toString()}
             @change=${this.depthChanged}
           >
             <option value="2">2 (Fast)</option>

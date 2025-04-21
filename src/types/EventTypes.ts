@@ -1,9 +1,8 @@
 import { Square } from 'chess.js';
-import { ChessPieceType } from './ChessBoardElementTypes';
 
 /*
  * Chess Piece Events
-*/
+ */
 
 export interface ChessPieceDroppedEventDetail {
   source: Square;
@@ -26,7 +25,9 @@ export interface ChessPieceDragStartEventDetail {
 }
 
 export class ChessPieceDragStartEvent extends CustomEvent<ChessPieceDragStartEventDetail> {
-  constructor(customEventInit?: CustomEventInit<ChessPieceDragStartEventDetail>) {
+  constructor(
+    customEventInit?: CustomEventInit<ChessPieceDragStartEventDetail>,
+  ) {
     super('chess-piece-drag-start', {
       ...customEventInit,
       bubbles: true,
@@ -51,7 +52,7 @@ export class ChessPieceHoverEvent extends CustomEvent<ChessPieceHoverEventDetail
 
 /*
  * Chess Square Events
-*/
+ */
 
 export interface ChessSquareHoverEventDetail {
   squareId: Square;
@@ -79,7 +80,7 @@ export class ChessSquareUnhoverEvent extends CustomEvent<ChessSquareHoverEventDe
 
 /*
  * Chess Board Events
-*/
+ */
 
 export interface RequestMoveEventDetail {
   from: Square;
@@ -125,7 +126,7 @@ export class CloseDialogClickedEvent extends CustomEvent<void> {
 
 /*
  * Chess Panel Events
-*/
+ */
 
 export class NewGameClickedEvent extends CustomEvent<void> {
   constructor() {
@@ -176,5 +177,3 @@ export class AIvsAIStopEvent extends CustomEvent<void> {
     });
   }
 }
-
-
