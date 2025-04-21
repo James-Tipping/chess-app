@@ -24,17 +24,20 @@ export class ChessSquare extends LitElement {
     .light {
       background-color: #f0d9b5;
     }
+    .light.highlighted {
+      background-color: #7c8594;
+    }
     .dark {
       background-color: #b58863;
+    }
+    .dark.highlighted {
+      background-color: #5e6570;
     }
     .from {
       border: 10px solid #c4bf5c;
     }
     .to {
       border: 10px solid #e8dd10;
-    }
-    .highlighted {
-      filter: brightness(0.5);
     }
   `;
 
