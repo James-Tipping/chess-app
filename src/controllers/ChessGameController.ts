@@ -1,8 +1,8 @@
 /* eslint-disable no-dupe-class-members */
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import { Chess, Move, Square } from 'chess.js';
-import { WorkerResponse } from './types/WorkerTypes';
-import { evaluateBoard } from './utils/Utils';
+import { WorkerResponse } from '../types/WorkerTypes';
+import { evaluateBoard } from '../utils/Utils';
 
 export class ChessGameController implements ReactiveController {
   private _host: ReactiveControllerHost;
@@ -19,7 +19,6 @@ export class ChessGameController implements ReactiveController {
 
   private _isAIvsAIMode: boolean = false;
 
-
   private _isThinking: boolean = false;
 
   constructor(host: ReactiveControllerHost) {
@@ -33,7 +32,7 @@ export class ChessGameController implements ReactiveController {
     if (typeof window === 'undefined') return;
 
     this._worker = new Worker(
-      new URL('./utils/MinimaxWorker.js', import.meta.url),
+      new URL('../utils/MinimaxWorker.js', import.meta.url),
       { type: 'module' },
     );
     this._worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
@@ -80,10 +79,10 @@ export class ChessGameController implements ReactiveController {
   movePiece(
     moveParams:
       | {
-        from: string;
-        to: string;
-        promotion: string;
-      }
+          from: string;
+          to: string;
+          promotion: string;
+        }
       | string
       | Move,
   ): void {
@@ -161,12 +160,11 @@ export class ChessGameController implements ReactiveController {
 
   getValidMoves = (squareId: Square) => {
     const moves = this._game?.moves({ square: squareId, verbose: true }) || [];
-    const squaresToMoveTo = moves.map((move) => move.to);
+    const squaresToMoveTo = moves.map(move => move.to);
     return squaresToMoveTo;
-  }
+  };
 
   startAIvsAIMode() {
-
     this._isAIvsAIMode = true;
     this._game?.reset();
     this._lastMove = null;
@@ -196,7 +194,12 @@ export class ChessGameController implements ReactiveController {
 
   makeAiMove() {
     // Ensure worker exists and we are in a browser context before posting message
-    if (this._worker && typeof window !== 'undefined' && !this._isThinking && !this.isGameOver) {
+    if (
+      this._worker &&
+      typeof window !== 'undefined' &&
+      !this._isThinking &&
+      !this.isGameOver
+    ) {
       this._isThinking = true;
       this._worker.postMessage({
         fen: this._game?.fen(),

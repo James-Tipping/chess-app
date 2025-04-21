@@ -6,15 +6,15 @@ import {
   render,
   TemplateResult,
 } from 'lit';
-import { DialogElement } from './components/DialogElement';
-import { CloseDialogEvent } from './types/EventTypes';
+import { DialogElement } from '../components/DialogElement';
+import { CloseDialogEvent } from '../types/EventTypes';
 
 export interface DialogProperties {
   contentRenderer: () => TemplateResult;
   styles?: CSSResult;
 }
 
-export default class DialogController implements ReactiveController {
+export class DialogController implements ReactiveController {
   private _host: ReactiveControllerHost;
 
   private _dialogElement: HTMLElement | null = null;

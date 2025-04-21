@@ -1,6 +1,5 @@
 export * from './ChessApp';
-export * from './ChessGameController';
-export * from './DialogController';
+export * from './controllers/index';
 export * from './components/index';
 export * from './pieces/index';
 export * from './types/index';
