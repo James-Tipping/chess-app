@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-globals */
+// fen before checkmate: "8/6pk/7p/PQp5/8/8/r6r/4RR1K w - - 0 51"
 import { Chess } from 'chess.js';
 import { evaluateBoard } from './Utils';
 import { WorkerMessage, WorkerResponse } from '../types/WorkerTypes';
@@ -19,7 +20,9 @@ function minimax(
       return [isMaximizingPlayer ? -100000 : 100000, ''];
     }
     if (game.isDraw()) {
-      return [0, ''];
+      return [isMaximizingPlayer ? -200000 : 200000, ''];
+      // return [0, ''];
+
     }
     return [evaluateBoard(game), ''];
   }
