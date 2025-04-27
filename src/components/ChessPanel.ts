@@ -8,6 +8,7 @@ import {
   AIvsAIStartEvent,
   AIvsAIStopEvent,
 } from '../types/EventTypes';
+import { ButtonState } from '../types';
 
 @customElement('chess-panel')
 export class ChessPanel extends LitElement {
@@ -128,10 +129,12 @@ export class ChessPanel extends LitElement {
             ? html`<button-element
                 @button-clicked=${this.stopAIvsAI}
                 label="Stop AI vs AI"
+                .buttonState=${ButtonState.DANGER}
               ></button-element>`
             : html`<button-element
                 @button-clicked=${this.startAIvsAI}
                 label="Start AI vs AI"
+                .buttonState=${ButtonState.PRIMARY}
               ></button-element>`}
         </div>
       </div>

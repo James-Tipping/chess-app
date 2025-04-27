@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-globals */
-// fen before checkmate: "8/6pk/7p/PQp5/8/8/r6r/4RR1K w - - 0 51"
 import { Chess } from 'chess.js';
 import { evaluateBoard } from './Utils';
 import { WorkerMessage, WorkerResponse } from '../types/WorkerTypes';
@@ -20,9 +19,8 @@ function minimax(
       return [isMaximizingPlayer ? -100000 : 100000, ''];
     }
     if (game.isDraw()) {
-      return [isMaximizingPlayer ? -200000 : 200000, ''];
-      // return [0, ''];
-
+      // return [isMaximizingPlayer ? -200000 : 200000, ''];
+      return [0, ''];
     }
     return [evaluateBoard(game), ''];
   }
@@ -70,12 +68,10 @@ function minimax(
   return [bestScore, bestMove];
 }
 
-function getBestMove(
-  fen: string | undefined,
-  depth: number = 3,
-): [string | null, number] {
+function getBestMove(pgn: string, depth: number = 3): [string | null, number] {
   positionsEvaluated = 0;
-  const game = new Chess(fen);
+  const game = new Chess();
+  game.loadPgn(pgn);
   const isMaximizingPlayer = game.turn() === 'b';
   const [, bestMove] = minimax(
     game,
@@ -90,8 +86,8 @@ function getBestMove(
 // Only set up the message handler if running in a worker context
 if (typeof self !== 'undefined' && typeof self.postMessage === 'function') {
   self.onmessage = (e: MessageEvent<WorkerMessage>) => {
-    const { fen, depth } = e.data;
-    const [bestMove, positions] = getBestMove(fen, depth);
+    const { pgn, depth } = e.data;
+    const [bestMove, positions] = getBestMove(pgn, depth);
     self.postMessage({
       bestMove,
       positionsEvaluated: positions,
