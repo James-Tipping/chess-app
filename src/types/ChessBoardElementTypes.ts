@@ -23,3 +23,8 @@ export enum ChessPieceType {
   BLACK_KNIGHT = 'n',
   BLACK_PAWN = 'p',
 }
+
+export enum ButtonState {
+  PRIMARY = 'primary',
+  DANGER = 'danger',
+}

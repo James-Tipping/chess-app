@@ -2,7 +2,7 @@ import { Move } from 'chess.js';
 
 export interface WorkerMessage {
   depth: number;
-  fen: string;
+  pgn: string;
 }
 
 export interface WorkerResponse {

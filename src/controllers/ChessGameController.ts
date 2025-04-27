@@ -202,7 +202,7 @@ export class ChessGameController implements ReactiveController {
     ) {
       this._isThinking = true;
       this._worker.postMessage({
-        fen: this._game?.fen(),
+        pgn: this._game?.pgn(),
         depth: this._searchDepth,
       });
     } else {
