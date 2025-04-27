@@ -11,7 +11,7 @@ import { CloseDialogEvent } from '../types/EventTypes';
 
 export interface DialogProperties {
   contentRenderer: () => TemplateResult;
-  styles?: CSSResult;
+  styles?: () => CSSResult;
 }
 
 export class DialogController implements ReactiveController {
@@ -51,7 +51,7 @@ export class DialogController implements ReactiveController {
     ) {
       adoptStyles(this._dialogElement.shadowRoot, [
         DialogElement.styles,
-        this._dialogProperties.styles,
+        this._dialogProperties.styles(),
       ]);
     }
     render(this._dialogProperties.contentRenderer(), this._dialogElement);
@@ -68,5 +68,5 @@ export class DialogController implements ReactiveController {
     }
   }
 
-  hostConnected(): void {}
+  hostConnected(): void { }
 }

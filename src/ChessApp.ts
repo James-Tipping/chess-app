@@ -1,6 +1,5 @@
 /* eslint-disable wc/guard-super-call */
 import { LitElement, PropertyValues, css, html } from 'lit';
-// Import property decorator
 import { customElement, property, state } from 'lit/decorators.js';
 import { ChessPieceColour } from './types/ChessBoardElementTypes';
 import { DialogMessage } from './types/DialogTypes';
@@ -145,7 +144,7 @@ export class ChessApp extends LitElement {
   private _dialogController: DialogController = new DialogController(this, {
     // Pass the dynamic content renderer
     contentRenderer: () => this.dialogContent(),
-    styles: this.dialogStyles,
+    styles: () => this.dialogStyles,
   });
 
   protected moveRequested(e: RequestMoveEvent) {
@@ -161,8 +160,6 @@ export class ChessApp extends LitElement {
     /* eslint-disable-next-line wc/guard-super-call */
     super.connectedCallback();
     this.addEventListener('close-dialog', this.closeDialog);
-    // Optional: Check system preference for initial mode
-    // this.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
   disconnectedCallback() {
@@ -185,18 +182,10 @@ export class ChessApp extends LitElement {
     }
   }
 
-  willUpdate(changedProperties: PropertyValues) {
-    // If darkMode property changes, DialogController might need updates
-    // if it doesn't automatically inherit CSS vars effectively.
-    // This depends on DialogController's implementation.
-    if (changedProperties.has('darkMode')) {
-       // If dialog styles don't update, might need explicit update call:
-       // this._dialogController.updateStyles(this.dialogStyles);
-    }
+  willUpdate() {
 
     if (this._gameController.isGameOver) {
-      // ... (rest of game over logic remains the same) ...
-       if (
+      if (
         this._gameController.isCheckmate &&
         this._gameController.whiteAdvantage > 0
       ) {
@@ -249,14 +238,11 @@ export class ChessApp extends LitElement {
     this._gameController.stopAIvsAIMode();
   }
 
-  // Method to toggle dark mode
   protected toggleDarkMode() {
     this.darkMode = !this.darkMode;
   }
 
   render() {
-    // The 'dark-mode' attribute is added/removed from <chess-app>
-    // automatically because darkMode property has reflect: true.
     return html`
       <button class="theme-toggle" @click=${this.toggleDarkMode}>
         Toggle Theme
@@ -276,7 +262,6 @@ export class ChessApp extends LitElement {
           .searchDepth=${this._gameController.searchDepth}
           .isAIvsAIMode=${this._gameController.isAIvsAIMode}
         >
-          <!-- Panel content (buttons etc) should use CSS vars -->
         </chess-panel>
         <chess-board
           .validMovesProvider=${this._gameController.getValidMoves}
@@ -284,7 +269,6 @@ export class ChessApp extends LitElement {
           .fen=${this._gameController.position}
         ></chess-board>
       </div>
-      <!-- DialogController renders its content elsewhere, but styles should use vars -->
     `;
   }
 }
