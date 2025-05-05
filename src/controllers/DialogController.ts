@@ -13,6 +13,7 @@ import '../components/DialogElement';
 export interface DialogProperties {
   contentRenderer: () => TemplateResult;
   styles?: Array<CSSResultOrNative>;
+  darkMode?: () => boolean;
 }
 
 export class DialogController implements ReactiveController {

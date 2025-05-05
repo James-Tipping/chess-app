@@ -1,4 +1,5 @@
 export * from './ChessApp';
+export * from './CssVars';
 export * from './controllers/index';
 export * from './components/index';
 export * from './pieces/index';
