@@ -27,29 +27,25 @@ export class ChessApp extends LitElement {
     <div class="message">${this._dialogMessage}</div>
   `;
 
-  // Update dialog styles to use CSS variables
   protected dialogStyles = css`
     ::slotted(.title),
     .title {
-      /* Target class directly too */
-      font-size: 2.5rem; /* Adjusted size */
+      font-size: 2.5rem;
       font-weight: 500;
       margin-bottom: 1rem;
-      color: inherit; /* Inherit color from wrapper */
+      color: inherit;
     }
     ::slotted(.message),
     .message {
-      /* Target class directly too */
-      font-size: 1.5rem; /* Adjusted size */
-      color: inherit; /* Inherit color from wrapper */
+      font-size: 1.5rem;
+      color: inherit;
     }
   `;
 
   private _dialogController: DialogController = new DialogController(this, {
-    // Pass the dynamic content renderer
     contentRenderer: () => this.dialogContent(),
     styles: [this.dialogStyles, cssVars, DialogElement.styles],
-    darkMode: () => this.darkMode,
+    isDarkMode: () => this.darkMode,
   });
 
   protected moveRequested(e: RequestMoveEvent) {
