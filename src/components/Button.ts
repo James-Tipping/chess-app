@@ -70,7 +70,7 @@ export class ButtonElement extends LitElement {
   @property({ type: String })
   buttonState: ButtonState = ButtonState.PRIMARY;
 
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   label?: string;
 
   protected handleButtonClicked() {

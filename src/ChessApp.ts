@@ -1,7 +1,7 @@
 /* eslint-disable wc/guard-super-call */
 import { LitElement, PropertyValues, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ChessPieceColour } from './types/ChessBoardElementTypes';
+import { ButtonState, ChessPieceColour } from './types/ChessBoardElementTypes';
 import { DialogMessage } from './types/DialogTypes';
 import { ChessGameController } from './controllers/ChessGameController';
 import './components/ChessBoard';
@@ -144,9 +144,13 @@ export class ChessApp extends LitElement {
 
   render() {
     return html`
-      <button class="theme-toggle" @click=${this.toggleDarkMode}>
-        Toggle Theme
-      </button>
+      <button-element
+        .buttonState=${ButtonState.SECONDARY}
+        class="theme-toggle"
+        label="Toggle Theme"
+        @button-clicked=${this.toggleDarkMode}
+      >
+      </button-element>
       <div
         class="container"
         @undo-clicked=${this.undoClicked}
@@ -198,18 +202,6 @@ export class ChessApp extends LitElement {
         position: absolute;
         top: 1rem;
         right: 1rem;
-        /* Use button variables for consistency */
-        background-color: var(--button-secondary-bg);
-        color: var(--button-secondary-text);
-        border: 1px solid var(--button-secondary-border);
-        padding: 0.5rem 1rem;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        z-index: 10; /* Ensure it's above other content */
-        font-size: 0.9rem;
-      }
-      .theme-toggle:hover {
-        opacity: 0.9;
       }
     `,
     cssVars,
