@@ -26,6 +26,6 @@ export enum ChessPieceType {
 
 export enum ButtonState {
   PRIMARY = 'primary',
-  SECONDARY = 'secondary', // Added
+  SECONDARY = 'secondary',
   DANGER = 'danger',
 }
