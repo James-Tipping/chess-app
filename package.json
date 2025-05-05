@@ -3,7 +3,7 @@
   "description": "A web component using a minimax algorithm, Lit, and chess.js to provide an AI powered chess game",
   "license": "GPL-3.0",
   "author": "James Tipping",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "main": "dist/src/index.js",
   "module": "dist/src/index.js",
