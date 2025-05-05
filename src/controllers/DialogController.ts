@@ -13,7 +13,7 @@ import '../components/DialogElement';
 export interface DialogProperties {
   contentRenderer: () => TemplateResult;
   styles?: Array<CSSResultOrNative>;
-  darkMode?: () => boolean;
+  isDarkMode?: () => boolean;
 }
 
 export class DialogController implements ReactiveController {
@@ -58,6 +58,11 @@ export class DialogController implements ReactiveController {
         this._dialogElement.shadowRoot,
         this._dialogProperties.styles,
       );
+      const isDarkMode =
+        typeof this._dialogProperties.isDarkMode === 'function'
+          ? this._dialogProperties.isDarkMode()
+          : false;
+      this._dialogElement.darkMode = isDarkMode;
     }
     render(this._dialogProperties.contentRenderer(), this._dialogElement);
   }

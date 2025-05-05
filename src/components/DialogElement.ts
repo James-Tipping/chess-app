@@ -1,5 +1,5 @@
 import { css, html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import './Button';
 import { CloseDialogClickedEvent } from '../types/EventTypes';
 // Import ButtonState if needed to set the default state for the close button
@@ -42,6 +42,9 @@ export class DialogElement extends LitElement {
       justify-content: flex-end;
     }
   `;
+
+  @property({ type: Boolean, reflect: true, attribute: 'dark-mode' })
+  darkMode = false;
 
   protected onClickClose() {
     this.dispatchEvent(new CloseDialogClickedEvent());
