@@ -19,7 +19,6 @@ function minimax(
       return [isMaximizingPlayer ? -100000 : 100000, ''];
     }
     if (game.isDraw()) {
-      // return [isMaximizingPlayer ? -200000 : 200000, ''];
       return [0, ''];
     }
     return [evaluateBoard(game), ''];

@@ -1,23 +1,24 @@
 import {
   adoptStyles,
-  CSSResult,
+  CSSResultOrNative,
   ReactiveController,
   ReactiveControllerHost,
   render,
   TemplateResult,
 } from 'lit';
-import { DialogElement } from '../components/DialogElement';
 import { CloseDialogEvent } from '../types/EventTypes';
+import { DialogElement } from '../components';
+import '../components/DialogElement';
 
 export interface DialogProperties {
   contentRenderer: () => TemplateResult;
-  styles?: () => CSSResult;
+  styles?: Array<CSSResultOrNative>;
 }
 
 export class DialogController implements ReactiveController {
   private _host: ReactiveControllerHost;
 
-  private _dialogElement: HTMLElement | null = null;
+  private _dialogElement: DialogElement | null = null;
 
   private _dialogProperties: DialogProperties;
 
@@ -36,9 +37,11 @@ export class DialogController implements ReactiveController {
 
   protected boundDispatchCloseEvent = this.dispatchCloseEvent.bind(this);
 
-  public show() {
+  public async show() {
     if (this._dialogElement == null) {
-      this._dialogElement = document.createElement('dialog-element');
+      this._dialogElement = document.createElement(
+        'dialog-element',
+      ) as DialogElement;
       document.body.appendChild(this._dialogElement);
       this._dialogElement.addEventListener(
         'close-dialog-clicked',
@@ -46,13 +49,14 @@ export class DialogController implements ReactiveController {
       );
     }
     if (
-      this._dialogElement.shadowRoot != null &&
+      this._dialogElement != null &&
+      this._dialogElement?.shadowRoot != null &&
       this._dialogProperties.styles
     ) {
-      adoptStyles(this._dialogElement.shadowRoot, [
-        DialogElement.styles,
-        this._dialogProperties.styles(),
-      ]);
+      adoptStyles(
+        this._dialogElement.shadowRoot,
+        this._dialogProperties.styles,
+      );
     }
     render(this._dialogProperties.contentRenderer(), this._dialogElement);
   }
@@ -68,5 +72,5 @@ export class DialogController implements ReactiveController {
     }
   }
 
-  hostConnected(): void { }
+  hostConnected(): void {}
 }
