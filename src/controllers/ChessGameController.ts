@@ -24,7 +24,6 @@ export class ChessGameController implements ReactiveController {
   constructor(host: ReactiveControllerHost) {
     this._host = host;
     host.addController(this);
-    // Worker initialization moved to hostConnected
   }
 
   private initialiseWorker() {
@@ -79,18 +78,14 @@ export class ChessGameController implements ReactiveController {
   movePiece(
     moveParams:
       | {
-          from: string;
-          to: string;
-          promotion: string;
-        }
+        from: string;
+        to: string;
+        promotion: string;
+      }
       | string
       | Move,
   ): void {
-    try {
-      this._lastMove = this._game?.move(moveParams);
-    } catch (e) {
-      console.warn(e);
-    }
+    this._lastMove = this._game?.move(moveParams);
     this._host.requestUpdate();
   }
 
@@ -205,8 +200,6 @@ export class ChessGameController implements ReactiveController {
         pgn: this._game?.pgn(),
         depth: this._searchDepth,
       });
-    } else {
-      console.warn('cant make move');
     }
   }
 
