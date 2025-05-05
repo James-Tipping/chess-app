@@ -175,22 +175,22 @@ export class ChessApp extends LitElement {
   static styles = [
     css`
       :host {
-        /* Apply base styles */
-        display: block; /* Ensure it takes up space */
+        display: block;
         background-color: var(--app-background);
         color: var(--app-text-color);
         box-sizing: border-box;
-        position: relative; /* Needed for absolute positioning of toggle */
+        position: relative;
+        height: 100%;
       }
 
       .container {
         display: flex;
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        align-items: flex-start; /* Align items to the top */
+        flex-wrap: wrap;
+        align-items: flex-start;
         gap: 2rem;
         justify-content: center;
         padding: 2rem;
-        padding-top: 5rem; /* Add padding to avoid overlap with toggle */
+        padding-top: 5rem;
       }
 
       /* Style the theme toggle button */

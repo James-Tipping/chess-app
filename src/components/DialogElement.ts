@@ -2,7 +2,6 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './Button';
 import { CloseDialogClickedEvent } from '../types/EventTypes';
-// Import ButtonState if needed to set the default state for the close button
 import { ButtonState } from '../types/ChessBoardElementTypes';
 
 @customElement('dialog-element')

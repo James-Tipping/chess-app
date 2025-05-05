@@ -8,57 +8,55 @@ import {
   AIvsAIStartEvent,
   AIvsAIStopEvent,
 } from '../types/EventTypes';
-// Import ButtonState from the correct location
 import { ButtonState } from '../types/ChessBoardElementTypes';
 
 @customElement('chess-panel')
 export class ChessPanel extends LitElement {
   static styles = css`
-    /* Use CSS variables defined by the host (ChessApp) */
     .info-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       border-radius: 0.2rem;
       /* Use panel variables */
-      background-color: var(--panel-background, #f8f9fa); /* Fallback */
-      border: 1px solid var(--panel-border-color, #dee2e6); /* Fallback */
-      color: var(--panel-text-color, #212529); /* Fallback */
+      background-color: var(--panel-background, #f8f9fa);
+      border: 1px solid var(--panel-border-color, #dee2e6);
+      color: var(--panel-text-color, #212529);
       gap: 1rem;
-      padding: 1.5rem; /* Adjusted padding */
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Optional subtle shadow */
-      width: 300px; /* Give it a defined width */
+      padding: 1.5rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      width: 300px;
       box-sizing: border-box;
     }
     .title {
-      font-size: 2rem; /* Slightly smaller title */
+      font-size: 2rem;
       font-weight: 500;
       margin-bottom: 0.5rem;
-      color: inherit; /* Inherit color from container */
-      text-align: center; /* Center title */
+      color: inherit;
+      text-align: center;
     }
     .info-text {
-      font-size: 1.1rem; /* Slightly adjusted size */
+      font-size: 1.1rem;
       text-align: center;
-      color: inherit; /* Inherit color from container */
+      color: inherit;
       line-height: 1.5;
     }
     .buttons-container {
       display: flex;
       justify-content: space-around;
       width: 100%;
-      gap: 1rem; /* Add gap between buttons */
+      gap: 1rem;
     }
     .depth-selector {
       display: flex;
       align-items: center;
-      gap: 0.8rem; /* Adjusted gap */
+      gap: 0.8rem;
       width: 100%;
-      justify-content: center; /* Center the selector items */
+      justify-content: center;
     }
     .depth-selector label {
        font-size: 1rem;
-       color: inherit; /* Inherit color */
+       color: inherit;
     }
     .depth-selector select {
       padding: 0.5rem;
@@ -71,20 +69,17 @@ export class ChessPanel extends LitElement {
     }
     /* Style focus state for accessibility */
     .depth-selector select:focus {
-       border-color: var(--button-primary-bg, #0d6efd); /* Use primary color for focus */
+       border-color: var(--button-primary-bg, #0d6efd);
        outline: 0;
-       box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25); /* Match Bootstrap focus */
+       box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
     }
     .section-divider {
       width: 100%;
       height: 1px;
       /* Use border color for the divider */
       background-color: var(--app-border-color, #dee2e6);
-      margin: 1rem 0; /* Adjusted margin */
+      margin: 1rem 0;
     }
-
-    /* Ensure button-element itself uses the CSS vars internally */
-    /* No specific styles needed here if button-element handles its own theming */
   `;
 
   @property({ type: Number })
@@ -114,23 +109,19 @@ export class ChessPanel extends LitElement {
   }
 
   protected startAIvsAI() {
-    // Remove state update, handled by ChessApp/Controller
     this.dispatchEvent(new AIvsAIStartEvent());
   }
 
   protected stopAIvsAI() {
-    // Remove state update, handled by ChessApp/Controller
     this.dispatchEvent(new AIvsAIStopEvent());
   }
 
   render() {
-    // Format advantage to one decimal place
-    const advantageDisplay = this.playerAdvantage.toFixed(1);
 
     return html`
       <div class="info-container">
         <div class="title">Minimax Chess</div>
-        <div class="info-text">Player Advantage: ${advantageDisplay}</div>
+        <div class="info-text">Player Advantage: ${this.playerAdvantage}</div>
         <div class="info-text">
           Positions Evaluated: ${this.positionsEvaluated.toLocaleString()}
         </div>
@@ -152,13 +143,13 @@ export class ChessPanel extends LitElement {
         <div class="buttons-container">
           <button-element
             @button-clicked=${this.newGameClicked}
-            label="New Game"
+            .label="New Game"
             .buttonState=${ButtonState.PRIMARY}
           ></button-element>
           <button-element
             @button-clicked=${this.undoClicked}
-            label="Undo"
-            .buttonState=${ButtonState.SECONDARY} /* Use secondary state */
+            .label="Undo"
+            .buttonState=${ButtonState.SECONDARY}
           ></button-element>
         </div>
 
@@ -166,14 +157,14 @@ export class ChessPanel extends LitElement {
 
         <div class="buttons-container">
           ${this.isAIvsAIMode
-            ? html`<button-element
+        ? html`<button-element
                 @button-clicked=${this.stopAIvsAI}
-                label="Stop AI vs AI"
+                .label="Stop AI vs AI"
                 .buttonState=${ButtonState.DANGER}
               ></button-element>`
-            : html`<button-element
+        : html`<button-element
                 @button-clicked=${this.startAIvsAI}
-                label="Start AI vs AI"
+                .label="Start AI vs AI"
                 .buttonState=${ButtonState.PRIMARY}
               ></button-element>`}
         </div>
