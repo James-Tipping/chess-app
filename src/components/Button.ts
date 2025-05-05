@@ -61,19 +61,18 @@ export class ButtonElement extends LitElement {
 
     /* Focus styles for accessibility */
     button:focus-visible {
-       outline: 2px solid var(--button-primary-bg, #0d6efd); /* Use primary color for focus outline */
-       outline-offset: 2px;
-       /* Or use box-shadow for focus ring */
-       /* box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25); */
+      outline: 2px solid var(--button-primary-bg, #0d6efd); /* Use primary color for focus outline */
+      outline-offset: 2px;
+      /* Or use box-shadow for focus ring */
+      /* box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25); */
     }
     /* Adjust focus for danger/secondary if needed */
-     button.danger:focus-visible {
-       outline-color: var(--button-danger-bg, #dc3545);
-     }
-     button.secondary:focus-visible {
-       outline-color: var(--button-secondary-bg, #6c757d);
-     }
-
+    button.danger:focus-visible {
+      outline-color: var(--button-danger-bg, #dc3545);
+    }
+    button.secondary:focus-visible {
+      outline-color: var(--button-secondary-bg, #6c757d);
+    }
 
     /* Active state animation */
     button:active {
@@ -81,13 +80,10 @@ export class ButtonElement extends LitElement {
       transform: scale(0.95); /* Slightly less drastic scale */
       filter: brightness(90%); /* Darken slightly when pressed */
     }
-
-    /* Removed the old keyframes animation */
-    /* Removed the unused .button-container style */
   `;
 
-  @property({ type: String }) // Keep as String if values are 'primary', 'danger' etc.
-  buttonState: ButtonState = ButtonState.PRIMARY; // Default state
+  @property({ type: String })
+  buttonState: ButtonState = ButtonState.PRIMARY;
 
   @property({ type: String })
   label?: string;
@@ -101,7 +97,7 @@ export class ButtonElement extends LitElement {
     const buttonClasses = classMap({
       primary: this.buttonState === ButtonState.PRIMARY,
       danger: this.buttonState === ButtonState.DANGER,
-      secondary: this.buttonState === ButtonState.SECONDARY, // Add secondary state
+      secondary: this.buttonState === ButtonState.SECONDARY,
     });
 
     return html`
