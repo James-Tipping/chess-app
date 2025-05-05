@@ -55,8 +55,8 @@ export class ChessPanel extends LitElement {
       justify-content: center;
     }
     .depth-selector label {
-       font-size: 1rem;
-       color: inherit;
+      font-size: 1rem;
+      color: inherit;
     }
     .depth-selector select {
       padding: 0.5rem;
@@ -69,9 +69,9 @@ export class ChessPanel extends LitElement {
     }
     /* Style focus state for accessibility */
     .depth-selector select:focus {
-       border-color: var(--button-primary-bg, #0d6efd);
-       outline: 0;
-       box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+      border-color: var(--button-primary-bg, #0d6efd);
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
     }
     .section-divider {
       width: 100%;
@@ -117,7 +117,6 @@ export class ChessPanel extends LitElement {
   }
 
   render() {
-
     return html`
       <div class="info-container">
         <div class="title">Minimax Chess</div>
@@ -143,12 +142,12 @@ export class ChessPanel extends LitElement {
         <div class="buttons-container">
           <button-element
             @button-clicked=${this.newGameClicked}
-            .label="New Game"
+            label="New Game"
             .buttonState=${ButtonState.PRIMARY}
           ></button-element>
           <button-element
             @button-clicked=${this.undoClicked}
-            .label="Undo"
+            label="Undo"
             .buttonState=${ButtonState.SECONDARY}
           ></button-element>
         </div>
@@ -157,14 +156,14 @@ export class ChessPanel extends LitElement {
 
         <div class="buttons-container">
           ${this.isAIvsAIMode
-        ? html`<button-element
+            ? html`<button-element
                 @button-clicked=${this.stopAIvsAI}
-                .label="Stop AI vs AI"
+                label="Stop AI vs AI"
                 .buttonState=${ButtonState.DANGER}
               ></button-element>`
-        : html`<button-element
+            : html`<button-element
                 @button-clicked=${this.startAIvsAI}
-                .label="Start AI vs AI"
+                label="Start AI vs AI"
                 .buttonState=${ButtonState.PRIMARY}
               ></button-element>`}
         </div>
