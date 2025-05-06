@@ -15,7 +15,7 @@ export class ChessGameController implements ReactiveController {
 
   private _positionsEvaluated: number = 0;
 
-  private _searchDepth: number = 3;
+  public searchDepth: number = 3;
 
   private _isAIvsAIMode: boolean = false;
 
@@ -78,10 +78,10 @@ export class ChessGameController implements ReactiveController {
   movePiece(
     moveParams:
       | {
-        from: string;
-        to: string;
-        promotion: string;
-      }
+          from: string;
+          to: string;
+          promotion: string;
+        }
       | string
       | Move,
   ): void {
@@ -141,14 +141,6 @@ export class ChessGameController implements ReactiveController {
     return this._positionsEvaluated;
   }
 
-  get searchDepth(): number {
-    return this._searchDepth;
-  }
-
-  set searchDepth(depth: number) {
-    this._searchDepth = depth;
-  }
-
   get isAIvsAIMode(): boolean {
     return this._isAIvsAIMode;
   }
@@ -198,7 +190,7 @@ export class ChessGameController implements ReactiveController {
       this._isThinking = true;
       this._worker.postMessage({
         pgn: this._game?.pgn(),
-        depth: this._searchDepth,
+        depth: this.searchDepth,
       });
     }
   }

@@ -7,7 +7,8 @@ The only dependencies are Lit (a lightweight framework for creating web componen
 A custom minimax algorithm is used to find the best move for the AI. An AI vs AI mode is provided to demonstrate the AI capabilities.
 As the minimax algorithm is tree based, the search depth can be controlled, which corresponds to how far down the tree the algorithm searches. The deeper the search, the better the AI's move will be, but the longer it will take to calculate. To prevent the UI freezing during the calculation, a web worker is used to run the algorithm in a separate thread.
 
-![minimax-chess-component](./app-screenshot.png)
+![minimax-chess-component](./app-screenshot-1.png)
+![dark mode](./app-screenshot-2.png)
 
 ## Installation
 
@@ -60,7 +61,7 @@ const ChessComponent = createComponent({
 export default function ReactChessApp() {
   return (
     <div className={styles.minimaxChessContainer}>
-      <ChessComponent />
+      <ChessComponent darkMode={true} />
     </div>
   );
 }
