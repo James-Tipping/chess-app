@@ -70,3 +70,17 @@ export default function ReactChessApp() {
 ## Rendering in other frameworks
 
 As web components are framework agnostic, they are able to be used in most frameworks. Follow your framework's documentation for how to render web components.
+
+## Attributions
+
+I would like to thank the authors of several articles and pieces of software, namely:
+
+- All contributors to the Lit components project for their efforts in producing the Lit library.
+- Jeff Hlywa for his work on the `chess.js` library, without which this project would have been
+  significantly more difficult.
+- Zhang Zeyu, for an excellent article on how he approached this problem. The piece square tables
+  and evaluation function are taken from his work.
+- Thomas Dybdahl Ahle, from whom Zhang Zeyu adapted the piece square tables.
+
+Their respective licences, GitHub repos, and contact details, where appropriate, are given
+in the `LICENSE.thirdparty` file.
