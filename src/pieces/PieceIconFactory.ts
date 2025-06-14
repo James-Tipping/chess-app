@@ -1,3 +1,18 @@
+// Copyright (C) <2025>  <James Tipping> <github.com/James-Tipping>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import { html, nothing, TemplateResult } from 'lit';
 import {
   ChessPieceType,
@@ -11,7 +26,10 @@ import './QueenPiece.js';
 import './RookPieceIcon.js';
 
 export class PieceIconFactory {
-  static createPiece(type?: ChessPieceType, size?: number): TemplateResult | typeof nothing {
+  static createPiece(
+    type?: ChessPieceType,
+    size?: number,
+  ): TemplateResult | typeof nothing {
     const colour = this.getColour(type);
     if (!colour) return nothing; // Handle case where type is undefined
 
@@ -58,7 +76,9 @@ export class PieceIconFactory {
     }
   }
 
-  private static getColour(type?: ChessPieceType): ChessPieceColour | undefined {
+  private static getColour(
+    type?: ChessPieceType,
+  ): ChessPieceColour | undefined {
     if (!type) return undefined;
     return type === type.toUpperCase()
       ? ChessPieceColour.WHITE
